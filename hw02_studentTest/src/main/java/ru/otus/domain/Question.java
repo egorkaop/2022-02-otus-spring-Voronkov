@@ -1,8 +1,10 @@
 package ru.otus.domain;
 
 import com.opencsv.bean.CsvBindByPosition;
+import lombok.Data;
+import lombok.Getter;
 
-
+@Getter
 public class Question {
 
     @CsvBindByPosition(position = 0)
@@ -10,36 +12,13 @@ public class Question {
     @CsvBindByPosition(position = 1)
     private String question;
     @CsvBindByPosition(position = 2)
-    private String firstAnswer;
+    private String answers;
     @CsvBindByPosition(position = 3)
-    private String secondAnswer;
-    @CsvBindByPosition(position = 4)
     private String correctAnswer;
-
-    public int getIndex() {
-        return index;
-    }
-
-    public String getQuestion() {
-        return question;
-    }
-
-    public String getFirstAnswer() {
-        return firstAnswer;
-    }
-
-    public String getSecondAnswer() {
-        return secondAnswer;
-    }
-
-    public String getCorrectAnswer() {
-        return correctAnswer;
-    }
 
     @Override
     public String toString() {
         return question + " " +
-                firstAnswer + " " +
-                secondAnswer;
+                answers;
     }
 }

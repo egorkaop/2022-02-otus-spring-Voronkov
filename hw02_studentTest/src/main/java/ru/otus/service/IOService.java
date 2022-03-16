@@ -6,6 +6,6 @@ public interface IOService {
 
     String inputText();
 
-    void closeInput();
+    void outputFormatText(String format,Object... o);
 
 }

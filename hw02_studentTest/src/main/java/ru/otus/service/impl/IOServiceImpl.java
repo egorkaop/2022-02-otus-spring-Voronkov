@@ -39,12 +39,8 @@ public class IOServiceImpl implements IOService {
     }
 
     @Override
-    public void closeInput() {
-        try {
-            in.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void outputFormatText(String format, Object... o) {
+        System.out.printf(format,o);
     }
 }
 

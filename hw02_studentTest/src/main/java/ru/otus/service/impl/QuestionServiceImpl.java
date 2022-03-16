@@ -1,7 +1,11 @@
 package ru.otus.service.impl;
 
 import java.util.List;
+
+import lombok.AllArgsConstructor;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.otus.dao.QuestionDao;
@@ -12,7 +16,7 @@ import ru.otus.service.PersonService;
 import ru.otus.service.QuestionService;
 import ru.otus.service.QuestionsPrinterService;
 
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @Service
 public class QuestionServiceImpl implements QuestionService {
 
@@ -21,7 +25,8 @@ public class QuestionServiceImpl implements QuestionService {
     private final PersonService personService;
     private final IOService ioService;
     @Value("${successful.score}")
-    private int successfulScore;
+    private final int successfulScore;
+    private static final String FORMAT_OF_RESULT="%s %s количество верных ответов:%s количество ответов для сдачи:%s \n";
 
     @Override
     public void startTesting() {
@@ -41,7 +46,6 @@ public class QuestionServiceImpl implements QuestionService {
             }
         }
         printResult(person, score);
-        ioService.closeInput();
     }
 
     private String getAnswer() {
@@ -53,9 +57,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     private void printResult(Person person, int score) {
-        ioService.outputText(person.getFirstName() + " " + person.getSurName()
-                + " количество верных ответов:" + score
-                + " количество ответов для сдачи:" + successfulScore);
+        ioService.outputFormatText(FORMAT_OF_RESULT,person.getFirstName(),person.getSurName(),score,successfulScore);
         if (score >= successfulScore) {
             ioService.outputText("Вы сдали");
         } else {
