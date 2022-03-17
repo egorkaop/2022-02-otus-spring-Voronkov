@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import ru.otus.dao.QuestionDao;
@@ -13,13 +16,11 @@ import ru.otus.exceptions.EmptyFileException;
 import ru.otus.exceptions.FileNotExistException;
 
 @Repository
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class QuestionDaoCsv implements QuestionDao {
-
+    @Value("${csv.file.name}")
     private final String csvFileName;
 
-    public QuestionDaoCsv(@Value("${csv.file.name}") String csvFileName) {
-        this.csvFileName = csvFileName;
-    }
 
     public List<Question> getListOfQuestions() {
         List<Question> questionList = null;

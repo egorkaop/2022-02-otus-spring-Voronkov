@@ -9,17 +9,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.otus.dao.QuestionDao;
+import ru.otus.domain.Answer;
 import ru.otus.domain.Person;
 import ru.otus.domain.Question;
+import ru.otus.dto.QuestionDto;
 import ru.otus.service.IOService;
 import ru.otus.service.PersonService;
 import ru.otus.service.QuestionService;
 import ru.otus.service.QuestionsPrinterService;
+import ru.otus.utils.MappingUtilsQuestion;
 
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @Service
 public class QuestionServiceImpl implements QuestionService {
 
+    private final MappingUtilsQuestion mappingUtilsQuestion;
     private final QuestionDao questionDao;
     private final QuestionsPrinterService questionsPrinterService;
     private final PersonService personService;
@@ -39,21 +43,31 @@ public class QuestionServiceImpl implements QuestionService {
         if (questionList.isEmpty()) {
             ioService.outputText("No questions found");
         }
-        for (Question question : questionList) {
-            questionsPrinterService.printQuestion(question);
-            if (checkAnswer(question, getAnswer())) {
+        List<QuestionDto> questionDtoList = mappingUtilsQuestion.mapToAllQuestionDto(questionList);
+        for (QuestionDto questionDto:questionDtoList){
+            questionsPrinterService.printQuestion(questionDto);
+            if(checkAnswer(getCorrectAnswer(questionDto),getPersonAnswer())){
                 score++;
             }
         }
         printResult(person, score);
     }
 
-    private String getAnswer() {
+    private String getCorrectAnswer(QuestionDto questionDto){
+        String correctAnswer="";
+        for(Answer answer:questionDto.getAnswerList()){
+            if(answer.isCorrect()){
+                correctAnswer=answer.getAnswer();
+            }
+        }
+        return correctAnswer;
+    }
+    private String getPersonAnswer() {
         return ioService.inputText();
     }
 
-    private boolean checkAnswer(Question question, String personAnswer) {
-        return question.getCorrectAnswer().equals(personAnswer);
+    private boolean checkAnswer(String correctAnswer, String personAnswer) {
+        return correctAnswer.equals(personAnswer);
     }
 
     private void printResult(Person person, int score) {
