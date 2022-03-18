@@ -2,16 +2,16 @@ package ru.otus.domain;
 
 import lombok.AllArgsConstructor;
 
+import java.util.List;
+
 @AllArgsConstructor
 public class QuestionTest {
-    private int index;
-    private String question;
-    private String answers;
-    private String correctAnswer;
+    String question;
+    List<AnswerTest> answerList;
 
     @Override
     public String toString() {
-        return question + " " +
-                answers;
+        return question +
+                answerList;
     }
 }

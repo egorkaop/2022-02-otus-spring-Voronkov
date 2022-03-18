@@ -1,7 +1,8 @@
 package ru.otus.dao;
 
-import java.util.List;
 import ru.otus.domain.Question;
+
+import java.util.List;
 
 public interface QuestionDao {
 

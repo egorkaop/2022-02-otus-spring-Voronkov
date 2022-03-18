@@ -5,6 +5,6 @@ import ru.otus.dto.QuestionDto;
 
 public interface QuestionsPrinterService {
 
-    void printQuestion(QuestionDto question);
+    void printQuestion(Question question);
 
 }
