@@ -21,33 +21,34 @@ public class QuestionServiceImpl implements QuestionService {
     private final IOService ioService;
     private final int successfulScore;
     private static final String FORMAT_OF_RESULT = "%s %s %s:%s %s:%s \n";
-    private final MessageSource messageSource;
     private final LocaleService localeService;
+    private final LanguageService languageService;
 
     public QuestionServiceImpl(QuestionDao questionDao, QuestionsPrinterService questionsPrinterService
-            , PersonService personService, IOService ioService, CsvFileConfig csvFileConfig, MessageSource messageSource, LocaleService localeService) {
+            , PersonService personService, IOService ioService, CsvFileConfig csvFileConfig
+            , MessageSource messageSource, LocaleService localeService, LanguageService languageService) {
         this.questionDao = questionDao;
         this.questionsPrinterService = questionsPrinterService;
         this.personService = personService;
         this.ioService = ioService;
         this.successfulScore = csvFileConfig.getScore();
-        this.messageSource = messageSource;
         this.localeService = localeService;
+        this.languageService = languageService;
     }
 
     @Override
     public void startTesting() {
         try {
             chooseLanguage();
-            askAllQuestion(questionDao.getListOfQuestions(), personService.getPerson());
         } catch (WrongInputException e) {
             System.out.println("wrong input");
         }
+        askAllQuestion(questionDao.getListOfQuestions(), personService.getPerson());
     }
 
     private void chooseLanguage() {
         ioService.outputText("Choose your language: ru en");
-        localeService.checkLanguage(ioService.inputText());
+        languageService.checkAndSetLanguage(ioService.inputText());
     }
 
     private void askAllQuestion(List<Question> questionList, Person person) {
@@ -89,7 +90,7 @@ public class QuestionServiceImpl implements QuestionService {
         if (score >= successfulScore) {
             ioService.outputText(localeService.localizeText("strings.successfully"));
         } else {
-            ioService.outputText("strings.failed");
+            ioService.outputText(localeService.localizeText("strings.failed"));
         }
     }
 

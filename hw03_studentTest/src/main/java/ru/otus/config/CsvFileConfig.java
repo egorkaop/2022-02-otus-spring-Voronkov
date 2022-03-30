@@ -7,8 +7,17 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "csv")
 @Component
 public class CsvFileConfig {
-    private String fileName;
+    private String defaultFileName;
     private int score;
+    private String fileName;
+
+    public String getDefaultFileName() {
+        return defaultFileName;
+    }
+
+    public void setDefaultFileName(String defaultFileName) {
+        this.defaultFileName = defaultFileName;
+    }
 
     public String getFileName() {
         return fileName;
