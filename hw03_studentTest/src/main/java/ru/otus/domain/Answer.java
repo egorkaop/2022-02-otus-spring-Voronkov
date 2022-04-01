@@ -1,17 +1,5 @@
 package ru.otus.domain;
 
-<<<<<<< HEAD
-public class Answer {
-    String text;
-    boolean correct;
-
-    public Answer(String text, boolean correct) {
-        this.text = text;
-        this.correct = correct;
-    }
-=======
-import java.util.List;
-
 public class Answer {
     String answer;
     boolean correct;
@@ -36,5 +24,4 @@ public class Answer {
     public String toString() {
         return answer;
     }
->>>>>>> origin/main
 }

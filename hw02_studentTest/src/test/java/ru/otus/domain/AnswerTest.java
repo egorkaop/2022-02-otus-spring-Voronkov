@@ -1,18 +1,9 @@
 package ru.otus.domain;
 
-<<<<<<< HEAD
-public class Answer {
-    String text;
-    boolean correct;
+import lombok.AllArgsConstructor;
 
-    public Answer(String text, boolean correct) {
-        this.text = text;
-        this.correct = correct;
-    }
-=======
-import java.util.List;
-
-public class Answer {
+@AllArgsConstructor
+public class AnswerTest {
     String answer;
     boolean correct;
 
@@ -31,10 +22,8 @@ public class Answer {
     public void setCorrect(boolean correct) {
         this.correct = correct;
     }
-
     @Override
     public String toString() {
         return answer;
     }
->>>>>>> origin/main
 }
