@@ -10,6 +10,7 @@
   <modules>
     <module>hw01-studentTest</module>
     <module>hw02_studentTest</module>
+      <module>hw04_studentTest</module>
   </modules>
 
 </project>
