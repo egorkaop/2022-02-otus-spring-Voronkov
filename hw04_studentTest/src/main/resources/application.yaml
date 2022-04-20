@@ -1,0 +1,16 @@
+csv:
+  defaultFileName: questions
+  score: 2
+
+locale:
+  locale: en
+  languages:
+    - en
+    - ru
+
+spring:
+  main:
+    allow-circular-references: true
+  messages:
+    encoding: UTF-8
+    basename: i18n/messages
