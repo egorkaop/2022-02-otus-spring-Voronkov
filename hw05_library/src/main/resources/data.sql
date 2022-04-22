@@ -1,0 +1,6 @@
+insert into AUTHORS (`name`,`surname`) values ('Martin', 'George Raymond Richard')
+insert into GENRES (`title`) values ('Fantasy')
+insert into BOOKS (`name`,`author_id`,`genre_id`) values ('A song of ice and fire',1,1)
+insert into AUTHORS (`name`,`surname`) values ('Stephen', 'King')
+insert into GENRES (`title`) values ('horror')
+insert into BOOKS (`name`,`author_id`,`genre_id`) values ('it',2,2)
