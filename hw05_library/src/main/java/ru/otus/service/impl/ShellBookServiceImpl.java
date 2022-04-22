@@ -69,8 +69,7 @@ public class ShellBookServiceImpl implements ShellBookService {
     private Author getAuthor(long id) {
         try {
             return authorDao.getAuthorByID(id);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             throw new AuthorNotFoundException("По задданому id автор не найден");
         }
     }
@@ -78,8 +77,7 @@ public class ShellBookServiceImpl implements ShellBookService {
     private Genre getGenre(long id) {
         try {
             return genreDao.getGenreById(id);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             throw new GenreNotFoundException("По заданному id жанр не найден");
         }
     }

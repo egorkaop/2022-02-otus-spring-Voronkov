@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.dao.EmptyResultDataAccessException;
-import ru.otus.domain.Author;
 import ru.otus.domain.Book;
 
 import java.util.List;
@@ -15,7 +14,7 @@ import static org.assertj.core.api.Assertions.*;
 
 @DisplayName("Dao для работы с книгами должно")
 @JdbcTest
-@Import({BookDaoJdbc.class,AuthorDaoJdbc.class,GenreDaoJdbc.class})
+@Import({BookDaoJdbc.class, AuthorDaoJdbc.class, GenreDaoJdbc.class})
 class BookDaoJdbcTest {
     private static final int EXPECTED_BOOKS_COUNT = 1;
     private static final int EXISTING_BOOK_ID = 1;
@@ -40,7 +39,7 @@ class BookDaoJdbcTest {
     @Test
     void shouldReturnCorrectBookById() {
         Book expectedBook = new Book(EXISTING_BOOK_ID, EXISTING_BOOK_NAME
-                , authorDaoJdbc.getAuthorByID(1),genreDaoJdbc.getGenreById(1));
+                , authorDaoJdbc.getAuthorByID(1), genreDaoJdbc.getGenreById(1));
         System.out.println(expectedBook);
         Book actualBook = bookDaoJdbc.getBookById(EXISTING_BOOK_ID);
         System.out.println(actualBook);
@@ -52,7 +51,7 @@ class BookDaoJdbcTest {
     @Test
     void shouldReturnCorrectBookList() {
         List<Book> expectedBookList = List.of(new Book(EXISTING_BOOK_ID, EXISTING_BOOK_NAME
-                , authorDaoJdbc.getAuthorByID(EXISTING_AUTHOR_ID),genreDaoJdbc.getGenreById(EXISTING_GENRE_ID)));
+                , authorDaoJdbc.getAuthorByID(EXISTING_AUTHOR_ID), genreDaoJdbc.getGenreById(EXISTING_GENRE_ID)));
         List<Book> actualBookList = bookDaoJdbc.getAllBook();
         assertThat(actualBookList).usingRecursiveComparison().isEqualTo(expectedBookList);
     }
@@ -60,7 +59,7 @@ class BookDaoJdbcTest {
     @DisplayName("добавлять книгу")
     @Test
     void shouldInsertBook() {
-        Book expectedBook = new Book(2,"second", authorDaoJdbc.getAuthorByID(EXISTING_AUTHOR_ID),genreDaoJdbc.getGenreById(EXISTING_GENRE_ID));
+        Book expectedBook = new Book(2, "second", authorDaoJdbc.getAuthorByID(EXISTING_AUTHOR_ID), genreDaoJdbc.getGenreById(EXISTING_GENRE_ID));
         bookDaoJdbc.insertBook(expectedBook);
         Book actualBook = bookDaoJdbc.getBookById(expectedBook.getId());
         assertThat(actualBook).usingRecursiveComparison().isEqualTo(expectedBook);

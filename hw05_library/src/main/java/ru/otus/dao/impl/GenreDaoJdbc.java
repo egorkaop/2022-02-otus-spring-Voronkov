@@ -20,40 +20,40 @@ public class GenreDaoJdbc implements GenreDao {
 
     @Override
     public int count() {
-        Integer count = namedParameterJdbcOperations.getJdbcOperations().queryForObject("select count(*) from genres",Integer.class);
-        return count == null?0:count;
+        Integer count = namedParameterJdbcOperations.getJdbcOperations().queryForObject("select count(*) from genres", Integer.class);
+        return count == null ? 0 : count;
     }
 
     @Override
     public Genre getGenreById(long id) {
         return namedParameterJdbcOperations.queryForObject("select id,title from genres where id=:id"
-                , Map.of("id",id), new GenreMapper());
+                , Map.of("id", id), new GenreMapper());
     }
 
     @Override
     public List<Genre> getAllGenre() {
-        return namedParameterJdbcOperations.query("select id,title from genres",new GenreMapper());
+        return namedParameterJdbcOperations.query("select id,title from genres", new GenreMapper());
     }
 
     @Override
     public void insertGenre(Genre genre) {
         namedParameterJdbcOperations.update("insert into genres (title) values (:title)"
-                ,Map.of("title",genre.getName()));
+                , Map.of("title", genre.getName()));
     }
 
     @Override
     public void deleteGenreById(long id) {
-        int deletedRows = namedParameterJdbcOperations.update("delete from genres where id = :id",Map.of("id",id));
-        if (deletedRows==0){
+        int deletedRows = namedParameterJdbcOperations.update("delete from genres where id = :id", Map.of("id", id));
+        if (deletedRows == 0) {
             throw new GenreNotFoundException("По заданному id нет жанра");
         }
     }
 
-    private static class GenreMapper implements RowMapper<Genre>{
+    private static class GenreMapper implements RowMapper<Genre> {
 
         @Override
         public Genre mapRow(ResultSet rs, int rowNum) throws SQLException {
-            return new Genre(rs.getLong("id"),rs.getString("title"));
+            return new Genre(rs.getLong("id"), rs.getString("title"));
         }
     }
 }
