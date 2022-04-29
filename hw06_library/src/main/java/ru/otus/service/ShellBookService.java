@@ -10,4 +10,6 @@ public interface ShellBookService {
     void insertBook();
 
     void deleteBookById();
+
+    void updateBookTitleById();
 }

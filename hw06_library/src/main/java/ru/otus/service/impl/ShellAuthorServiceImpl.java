@@ -66,4 +66,13 @@ public class ShellAuthorServiceImpl implements ShellAuthorService {
             throw new AuthorNotFoundException("По задданому id автор не найден");
         }
     }
+
+    @Override
+    public void updateAuthorNameById() {
+        ioService.outputText("Введите id автора для замены");
+        long id = Long.parseLong(ioService.inputText());
+        ioService.outputText("Введите новое имя автора");
+        String name = ioService.inputText();
+        authorDao.updateAuthorNameById(id,name);
+    }
 }

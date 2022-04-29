@@ -11,4 +11,6 @@ public interface ShellAuthorService {
 
     void deleteAuthorById();
 
+    void updateAuthorNameById();
+
 }

@@ -15,7 +15,7 @@ import java.util.List;
 @NamedEntityGraph(name = "author-books-eg", attributeNodes = @NamedAttributeNode("books"))
 public class Author {
     @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column(name = "name",nullable = false)
     private String name;

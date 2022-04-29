@@ -38,4 +38,8 @@ public class AuthorCommands {
         shellAuthorService.deleteAuthorById();
         ioService.outputText("Автор удалён");
     }
+    @ShellMethod(value = "authorNameUpdateById", key = {"au", "authorNameUpdateById"})
+    public void authorNameUpdateById() {
+        shellAuthorService.updateAuthorNameById();
+    }
 }

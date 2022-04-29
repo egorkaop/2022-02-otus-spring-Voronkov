@@ -39,4 +39,9 @@ public class BookCommands {
         shellBookService.deleteBookById();
         ioService.outputText("Книга удалена");
     }
+
+    @ShellMethod(value = "bookTitleUpdateById", key = {"bu", "bookTitleUpdateById"})
+    public void bookTitleUpdateById() {
+        shellBookService.updateBookTitleById();
+    }
 }

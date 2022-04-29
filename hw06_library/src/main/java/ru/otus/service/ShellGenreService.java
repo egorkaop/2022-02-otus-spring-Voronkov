@@ -10,4 +10,5 @@ public interface ShellGenreService {
     void insertGenre();
 
     void deleteGenreById();
+    void updateGenreNameById();
 }

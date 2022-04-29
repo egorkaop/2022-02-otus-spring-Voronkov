@@ -54,4 +54,13 @@ public class ShellBookServiceImpl implements ShellBookService {
             throw new BookNotFoundException("По заданному id книги не найдено");
         }
     }
+
+    @Override
+    public void updateBookTitleById() {
+        ioService.outputText("Введите id книги для замены");
+        long id = Long.parseLong(ioService.inputText());
+        ioService.outputText("Введите новое название книги");
+        String title = ioService.inputText();
+        bookDao.updateBookTitleById(id,title);
+    }
 }

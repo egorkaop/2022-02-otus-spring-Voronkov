@@ -60,4 +60,13 @@ public class ShellGenreServiceImpl implements ShellGenreService {
             throw new GenreNotFoundException("По заданному id жанр не найден");
         }
     }
+
+    @Override
+    public void updateGenreNameById() {
+        ioService.outputText("Введите id жанра для замены");
+        long id = Long.parseLong(ioService.inputText());
+        ioService.outputText("Введите новое название жанра");
+        String name = ioService.inputText();
+        genreDao.updateGenreNameById(id,name);
+    }
 }
