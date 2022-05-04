@@ -1,6 +1,9 @@
 package ru.otus.domain;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.List;
@@ -11,20 +14,18 @@ import java.util.List;
 @Getter
 @Entity
 @Table(name = "genres")
-@ToString
 @NamedEntityGraph(name = "genre-books-eg", attributeNodes = @NamedAttributeNode("books"))
 public class Genre {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column(name = "name",nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
     @OneToMany
     @JoinColumn(name = "genre_id")
     private List<Book> books;
 
-    public Genre(String name, List<Book> books) {
+    public Genre(String name) {
         this.name = name;
-        this.books = books;
     }
 }

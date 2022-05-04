@@ -3,12 +3,12 @@ package ru.otus.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.otus.dao.GenreDao;
-import ru.otus.domain.Book;
 import ru.otus.domain.Genre;
+import ru.otus.dto.GenreDto;
 import ru.otus.exceptions.GenreNotFoundException;
 import ru.otus.service.IOService;
 import ru.otus.service.ShellGenreService;
-import ru.otus.utils.BookListMapper;
+import ru.otus.utils.GenreDtoMapper;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ import java.util.List;
 public class ShellGenreServiceImpl implements ShellGenreService {
     private final GenreDao genreDao;
     private final IOService ioService;
-    private final BookListMapper bookListMapper;
+    private final GenreDtoMapper genreDtoMapper;
 
     @Override
     public void getGenreCount() {
@@ -29,7 +29,8 @@ public class ShellGenreServiceImpl implements ShellGenreService {
         ioService.outputFormatText("Введите id жанра");
         long id = Long.parseLong(ioService.inputText());
         try {
-            ioService.outputText(genreDao.getGenreById(id).toString());
+            GenreDto genreDto = genreDtoMapper.convertGenreToDto(genreDao.getGenreById(id));
+            ioService.outputText(genreDto.toString());
         } catch (Exception e) {
             throw new GenreNotFoundException("По заданному id жанр не найден");
         }
@@ -37,17 +38,15 @@ public class ShellGenreServiceImpl implements ShellGenreService {
 
     @Override
     public void getAllGenres() {
-        ioService.outputText(genreDao.getAllGenre().toString());
+        List<GenreDto> genreDtoList = genreDtoMapper.convertListGenresToDto(genreDao.getAllGenre());
+        ioService.outputText(genreDtoList.toString());
     }
 
     @Override
     public void insertGenre() {
         ioService.outputText("Введите название жанра");
         String name = ioService.inputText();
-        ioService.outputText("Введите через запятую id книг, которые соответствуют жанру. Если книги нет в библиотеке, вы можете её добавить (bi)");
-        String booksId=ioService.inputText();
-        List<Book> bookList = bookListMapper.getBookList(booksId);
-        genreDao.insertGenre(new Genre(name,bookList));
+        genreDao.insertGenre(new Genre(name));
     }
 
     @Override
@@ -67,6 +66,6 @@ public class ShellGenreServiceImpl implements ShellGenreService {
         long id = Long.parseLong(ioService.inputText());
         ioService.outputText("Введите новое название жанра");
         String name = ioService.inputText();
-        genreDao.updateGenreNameById(id,name);
+        genreDao.updateGenreNameById(id, name);
     }
 }

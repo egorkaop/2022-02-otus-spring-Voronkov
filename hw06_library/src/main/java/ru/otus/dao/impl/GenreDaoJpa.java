@@ -4,6 +4,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.dao.GenreDao;
 import ru.otus.domain.Genre;
+import ru.otus.exceptions.GenreNotFoundException;
 
 import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
@@ -22,14 +23,14 @@ public class GenreDaoJpa implements GenreDao {
 
     @Override
     public long count() {
-        return entityManager.createQuery("select count(g) from Genre g",Long.class).getSingleResult();
+        return entityManager.createQuery("select count(g) from Genre g", Long.class).getSingleResult();
     }
 
     @Override
     public Genre getGenreById(long id) {
         EntityGraph<?> entityGraph = entityManager.getEntityGraph("genre-books-eg");
-        TypedQuery<Genre> query = entityManager.createQuery("select g from Genre g where g.id=:id",Genre.class);
-        query.setParameter("id",id);
+        TypedQuery<Genre> query = entityManager.createQuery("select g from Genre g where g.id=:id", Genre.class);
+        query.setParameter("id", id);
         query.setHint("javax.persistence.fetchgraph", entityGraph);
         return query.getSingleResult();
     }
@@ -37,17 +38,16 @@ public class GenreDaoJpa implements GenreDao {
     @Override
     public List<Genre> getAllGenre() {
         EntityGraph<?> entityGraph = entityManager.getEntityGraph("genre-books-eg");
-        TypedQuery<Genre> query = entityManager.createQuery("select g from Genre g",Genre.class);
+        TypedQuery<Genre> query = entityManager.createQuery("select g from Genre g", Genre.class);
         query.setHint("javax.persistence.fetchgraph", entityGraph);
         return query.getResultList();
     }
 
     @Override
     public void insertGenre(Genre genre) {
-        if (genre.getId()<=0){
+        if (genre.getId() <= 0) {
             entityManager.persist(genre);
-        }
-        else {
+        } else {
             entityManager.merge(genre);
         }
     }
@@ -55,15 +55,18 @@ public class GenreDaoJpa implements GenreDao {
     @Override
     public void deleteGenreById(long id) {
         Query query = entityManager.createQuery("delete from Genre g where g.id=:id");
-        query.setParameter("id",id);
-        query.executeUpdate();
+        query.setParameter("id", id);
+        int deletedRows = query.executeUpdate();
+        if (deletedRows == 0) {
+            throw new GenreNotFoundException("По заданному id комментария не найдено");
+        }
     }
 
     @Override
     public void updateGenreNameById(long id, String name) {
         Query query = entityManager.createQuery("update Genre g set g.name=:name where g.id=:id");
-        query.setParameter("name",name);
-        query.setParameter("id",id);
+        query.setParameter("name", name);
+        query.setParameter("id", id);
         query.executeUpdate();
     }
 }

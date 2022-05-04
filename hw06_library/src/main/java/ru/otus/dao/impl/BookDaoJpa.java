@@ -4,6 +4,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.dao.BookDao;
 import ru.otus.domain.Book;
+import ru.otus.exceptions.BookNotFoundException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -21,26 +22,25 @@ public class BookDaoJpa implements BookDao {
 
     @Override
     public long count() {
-        return entityManager.createQuery("select count(b) from Book b",Long.class).getSingleResult();
+        return entityManager.createQuery("select count(b) from Book b", Long.class).getSingleResult();
     }
 
     @Override
     public Book getBookById(long id) {
-        return entityManager.find(Book.class,id);
+        return entityManager.find(Book.class, id);
     }
 
     @Override
     public List<Book> getAllBook() {
-        TypedQuery<Book> query = entityManager.createQuery("select b from Book b",Book.class);
+        TypedQuery<Book> query = entityManager.createQuery("select b from Book b", Book.class);
         return query.getResultList();
     }
 
     @Override
     public void insertBook(Book book) {
-        if(book.getId()<=0){
+        if (book.getId() <= 0) {
             entityManager.persist(book);
-        }
-        else {
+        } else {
             entityManager.merge(book);
         }
     }
@@ -48,15 +48,18 @@ public class BookDaoJpa implements BookDao {
     @Override
     public void deleteBookById(long id) {
         Query query = entityManager.createQuery("delete from Book b where b.id=:id");
-        query.setParameter("id",id);
-        query.executeUpdate();
+        query.setParameter("id", id);
+        int deletedRows = query.executeUpdate();
+        if (deletedRows == 0) {
+            throw new BookNotFoundException("По заданному id книги не найдено");
+        }
     }
 
     @Override
     public void updateBookTitleById(long id, String title) {
         Query query = entityManager.createQuery("update Book b set b.title=:title where b.id=:id");
-        query.setParameter("title",title);
-        query.setParameter("id",id);
+        query.setParameter("title", title);
+        query.setParameter("id", id);
         query.executeUpdate();
     }
 }

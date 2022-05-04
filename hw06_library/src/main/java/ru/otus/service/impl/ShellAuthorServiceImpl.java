@@ -5,13 +5,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.dao.AuthorDao;
 import ru.otus.domain.Author;
-import ru.otus.domain.Book;
+import ru.otus.dto.AuthorDto;
 import ru.otus.exceptions.AuthorNotFoundException;
 import ru.otus.service.IOService;
 import ru.otus.service.ShellAuthorService;
-import ru.otus.utils.BookListMapper;
+import ru.otus.utils.AuthorDtoMapper;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -19,7 +18,8 @@ import java.util.List;
 public class ShellAuthorServiceImpl implements ShellAuthorService {
     private final AuthorDao authorDao;
     private final IOService ioService;
-    private final BookListMapper bookListMapper;
+    private final AuthorDtoMapper authorDtoMapper;
+
 
     @Override
     public void getAuthorCount() {
@@ -28,10 +28,11 @@ public class ShellAuthorServiceImpl implements ShellAuthorService {
 
     @Override
     public void getAuthorByID() {
-        ioService.outputFormatText("Введите id автора");
+        ioService.outputText("Введите id автора");
         long id = Long.parseLong(ioService.inputText());
         try {
-            ioService.outputText(authorDao.getAuthorById(id).toString());
+            AuthorDto authorDto = authorDtoMapper.convertAuthorToDto(authorDao.getAuthorById(id));
+            ioService.outputText(authorDto.toString());
         } catch (Exception e) {
             throw new AuthorNotFoundException("По задданому id автор не найден");
         }
@@ -40,7 +41,8 @@ public class ShellAuthorServiceImpl implements ShellAuthorService {
     @Override
     @Transactional
     public void getAllAuthors() {
-        ioService.outputText(authorDao.getAllAuthor().toString());
+        List<AuthorDto> authorDtoList = authorDtoMapper.convertListAuthorsToDto(authorDao.getAllAuthor());
+        ioService.outputText(authorDtoList.toString());
     }
 
     @Override
@@ -50,10 +52,7 @@ public class ShellAuthorServiceImpl implements ShellAuthorService {
         String name = ioService.inputText();
         ioService.outputText("Введите фамилию автора");
         String surname = ioService.inputText();
-        ioService.outputText("Введите через запятую id книг, которые написал автор. Если книги нет в библиотеке, вы можете её добавить (bi)");
-        String booksId=ioService.inputText();
-        List<Book> bookList = bookListMapper.getBookList(booksId);
-        authorDao.insertAuthor(new Author(name,surname,bookList));
+        authorDao.insertAuthor(new Author(name, surname));
     }
 
     @Override
@@ -73,6 +72,6 @@ public class ShellAuthorServiceImpl implements ShellAuthorService {
         long id = Long.parseLong(ioService.inputText());
         ioService.outputText("Введите новое имя автора");
         String name = ioService.inputText();
-        authorDao.updateAuthorNameById(id,name);
+        authorDao.updateAuthorNameById(id, name);
     }
 }

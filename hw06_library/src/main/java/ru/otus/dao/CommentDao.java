@@ -1,6 +1,5 @@
 package ru.otus.dao;
 
-import ru.otus.domain.Book;
 import ru.otus.domain.Comment;
 
 import java.util.List;
@@ -16,5 +15,5 @@ public interface CommentDao {
 
     void deleteCommentById(long id);
 
-    void updateCommentTextById(long id,String text);
+    void updateCommentTextById(long id, String text);
 }

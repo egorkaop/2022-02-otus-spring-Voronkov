@@ -2,19 +2,22 @@ package ru.otus.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.otus.dao.AuthorDao;
 import ru.otus.dao.BookDao;
-import ru.otus.dao.GenreDao;
 import ru.otus.domain.Book;
+import ru.otus.dto.BookDto;
 import ru.otus.exceptions.BookNotFoundException;
 import ru.otus.service.IOService;
 import ru.otus.service.ShellBookService;
+import ru.otus.utils.BookDtoMapper;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class ShellBookServiceImpl implements ShellBookService {
     private final BookDao bookDao;
     private final IOService ioService;
+    private final BookDtoMapper bookDtoMapper;
 
     @Override
     public void getBookCount() {
@@ -26,7 +29,8 @@ public class ShellBookServiceImpl implements ShellBookService {
         ioService.outputText("Введите id книги");
         long id = Long.parseLong(ioService.inputText());
         try {
-            ioService.outputText(bookDao.getBookById(id).toString());
+            BookDto bookDto = bookDtoMapper.convertBookToDto(bookDao.getBookById(id));
+            ioService.outputText(bookDto.toString());
         } catch (Exception e) {
             throw new BookNotFoundException("По заданному id книги не найдено");
         }
@@ -34,14 +38,19 @@ public class ShellBookServiceImpl implements ShellBookService {
 
     @Override
     public void getAllBooks() {
-        ioService.outputText(bookDao.getAllBook().toString());
+        List<BookDto> bookDtoList = bookDtoMapper.convertListBooksToDto(bookDao.getAllBook());
+        ioService.outputText(bookDtoList.toString());
     }
 
     @Override
     public void insertBook() {
         ioService.outputText("Введите название книги");
         String title = ioService.inputText();
-        bookDao.insertBook(new Book(title));
+        ioService.outputText("Введите id автора");
+        long authorId = Long.parseLong(ioService.inputText());
+        ioService.outputText("Введите id жанра");
+        long genreId = Long.parseLong(ioService.inputText());
+        bookDao.insertBook(new Book(title, authorId, genreId));
     }
 
     @Override
@@ -61,6 +70,6 @@ public class ShellBookServiceImpl implements ShellBookService {
         long id = Long.parseLong(ioService.inputText());
         ioService.outputText("Введите новое название книги");
         String title = ioService.inputText();
-        bookDao.updateBookTitleById(id,title);
+        bookDao.updateBookTitleById(id, title);
     }
 }

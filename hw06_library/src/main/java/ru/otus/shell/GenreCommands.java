@@ -39,6 +39,7 @@ public class GenreCommands {
         shellGenreService.deleteGenreById();
         ioService.outputText("Жанр удалён");
     }
+
     @ShellMethod(value = "genreNameUpdateById", key = {"gu", "genreNameUpdateById"})
     public void genreNameUpdateById() {
         shellGenreService.updateGenreNameById();

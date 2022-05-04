@@ -15,5 +15,5 @@ public interface BookDao {
 
     void deleteBookById(long id);
 
-    void updateBookTitleById(long id,String title);
+    void updateBookTitleById(long id, String title);
 }
