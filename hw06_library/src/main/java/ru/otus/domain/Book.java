@@ -1,29 +1,38 @@
 package ru.otus.domain;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
+import java.util.List;
 
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Getter
+@Setter
 @Table(name = "books")
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column(name = "title",nullable = false)
+    @Column(name = "title", nullable = false)
     private String title;
-    @Column(name = "author_id",nullable = false)
-    private long author_id;
-    @Column(name = "genre_id", nullable = false)
-    private long genre_id;
+    @OneToMany(targetEntity = Author.class, cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+    @JoinColumn(name = "book_id")
+    private List<Author> authors;
+    @OneToMany(targetEntity = Genre.class, cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+    @JoinColumn(name = "book_id")
+    private List<Genre> genres;
 
-    public Book(String title, long author_id, long genre_id) {
+    public Book(String title, List<Author> authors, List<Genre> genres) {
         this.title = title;
-        this.author_id = author_id;
-        this.genre_id = genre_id;
+        this.authors = authors;
+        this.genres = genres;
     }
 }

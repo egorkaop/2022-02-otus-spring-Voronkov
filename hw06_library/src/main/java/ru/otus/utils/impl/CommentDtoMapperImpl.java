@@ -10,6 +10,7 @@ import ru.otus.utils.CommentDtoMapper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -19,16 +20,13 @@ public class CommentDtoMapperImpl implements CommentDtoMapper {
     @Override
     public CommentDto convertCommentToDto(Comment comment) {
         String text = comment.getText();
-        BookDto bookDto = bookDtoMapper.convertBookToDto(comment.getBook());
-        return new CommentDto(text, bookDto);
+        return new CommentDto(text);
     }
 
     @Override
     public List<CommentDto> convertListCommentsToDto(List<Comment> commentList) {
-        List<CommentDto> commentDtoList = new ArrayList<>();
-        for (Comment comment : commentList) {
-            commentDtoList.add(convertCommentToDto(comment));
-        }
-        return commentDtoList;
+        return commentList.stream()
+                .map(this::convertCommentToDto)
+                .collect(Collectors.toList());
     }
 }

@@ -1,8 +1,4 @@
-insert into genres (name) values ('Fantasy'),('horror');
-insert into authors (name,surname) values ('Martin', 'George Raymond Richard');
-insert into books (title,author_id,genre_id) values ('A song of ice and fire',1,1);
-insert into comments (book_id,text) values (1,'Хорошая книга');
-insert into comments (book_id,text) values (1,'Супер книга');
-insert into authors (name,surname) values ('Stephen', 'King');
-insert into books (title,author_id,genre_id) values ('it',2,2);
-insert into comments (book_id,text) values (2,'Хорошая книга');
+insert into books(title) values ('A song of ice and fire'),('it');
+insert into genres (name,book_id) values ('Fantasy',1),('horror',2);
+insert into authors (name,surname,book_id) values ('Martin', 'George Raymond Richard',1),('Stephen', 'King',2);
+insert into comments (book_id,text) values (1,'Хорошая книга'),(1,'Супер книга'),(2,'Хорошая книга');

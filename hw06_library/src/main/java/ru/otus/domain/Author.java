@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
 
 
 @NoArgsConstructor
@@ -13,22 +12,20 @@ import java.util.List;
 @Table(name = "authors")
 @Getter
 @AllArgsConstructor
-@NamedEntityGraph(name = "author-books-eg", attributeNodes = @NamedAttributeNode("books"))
 public class Author {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column(name = "name",nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
-    @Column(name = "surname",nullable = false)
+    @Column(name = "surname", nullable = false)
     private String surname;
-    @OneToMany(targetEntity = Book.class)
-    @JoinColumn(name = "author_id")
-    private List<Book> books;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Book book;
+
 
     public Author(String name, String surname) {
         this.name = name;
         this.surname = surname;
     }
-
 }

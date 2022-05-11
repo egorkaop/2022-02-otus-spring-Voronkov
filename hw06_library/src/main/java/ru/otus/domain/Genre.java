@@ -3,10 +3,8 @@ package ru.otus.domain;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import javax.persistence.*;
-import java.util.List;
 
 
 @AllArgsConstructor
@@ -14,16 +12,15 @@ import java.util.List;
 @Getter
 @Entity
 @Table(name = "genres")
-@NamedEntityGraph(name = "genre-books-eg", attributeNodes = @NamedAttributeNode("books"))
 public class Genre {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column(name = "name", nullable = false)
     private String name;
-    @OneToMany
-    @JoinColumn(name = "genre_id")
-    private List<Book> books;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Book book;
+
 
     public Genre(String name) {
         this.name = name;

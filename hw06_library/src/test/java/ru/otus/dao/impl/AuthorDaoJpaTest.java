@@ -20,8 +20,6 @@ class AuthorDaoJpaTest {
     private static final long EXPECTED_COUNT_OF_AUTHORS = 1;
     private static final long EXISTING_AUTHOR_ID = 1;
     private static final String EXISTING_AUTHOR_NAME = "Martin";
-    private static final String EXISTING_AUTHOR_SURNAME = "George Raymond Richard";
-    private static final Book EXISTING_BOOK = new Book("A song of ice and fire", 1, 1);
     @Autowired
     private AuthorDaoJpa authorDaoJpa;
     @Autowired

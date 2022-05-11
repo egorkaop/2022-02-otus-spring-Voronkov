@@ -3,6 +3,7 @@ package ru.otus.dao.impl;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.dao.CommentDao;
+import ru.otus.domain.Book;
 import ru.otus.domain.Comment;
 import ru.otus.exceptions.CommentNotFoundException;
 
@@ -13,7 +14,6 @@ import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Repository
-@Transactional
 public class CommentDaoJpa implements CommentDao {
     private final EntityManager entityManager;
 
@@ -28,18 +28,11 @@ public class CommentDaoJpa implements CommentDao {
 
     @Override
     public Comment getCommentById(long id) {
-        EntityGraph<?> entityGraph = entityManager.getEntityGraph("comment-books-eg");
         TypedQuery<Comment> query = entityManager.createQuery("select c from Comment c where c.id=:id", Comment.class);
         query.setParameter("id", id);
-        query.setHint("javax.persistence.fetchgraph", entityGraph);
         return query.getSingleResult();
     }
 
-    @Override
-    public List<Comment> getAllComment() {
-        TypedQuery<Comment> query = entityManager.createQuery("select c from Comment c", Comment.class);
-        return query.getResultList();
-    }
 
     @Override
     public void insertComment(Comment comment) {
@@ -66,5 +59,12 @@ public class CommentDaoJpa implements CommentDao {
         query.setParameter("text", text);
         query.setParameter("id", id);
         query.executeUpdate();
+    }
+
+    @Override
+    public List<Comment> getCommentsByBookId(Book book) {
+        TypedQuery<Comment> query = entityManager.createQuery("select c from Comment c where c.book=:book",Comment.class);
+        query.setParameter("book",book);
+        return query.getResultList();
     }
 }

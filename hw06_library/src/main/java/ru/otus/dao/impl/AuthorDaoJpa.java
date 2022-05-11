@@ -3,9 +3,13 @@ package ru.otus.dao.impl;
 import org.springframework.stereotype.Repository;
 import ru.otus.dao.AuthorDao;
 import ru.otus.domain.Author;
+import ru.otus.domain.Book;
 import ru.otus.exceptions.AuthorNotFoundException;
 
-import javax.persistence.*;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Repository
@@ -25,18 +29,14 @@ public class AuthorDaoJpa implements AuthorDao {
 
     @Override
     public Author getAuthorById(long id) {
-        EntityGraph<?> entityGraph = entityManager.getEntityGraph("author-books-eg");
         TypedQuery<Author> query = entityManager.createQuery("select a from Author a where a.id=:id", Author.class);
         query.setParameter("id", id);
-        query.setHint("javax.persistence.fetchgraph", entityGraph);
         return query.getSingleResult();
     }
 
     @Override
     public List<Author> getAllAuthor() {
-        EntityGraph<?> entityGraph = entityManager.getEntityGraph("author-books-eg");
         TypedQuery<Author> query = entityManager.createQuery("select a from Author a", Author.class);
-        query.setHint("javax.persistence.fetchgraph", entityGraph);
         return query.getResultList();
     }
 
@@ -65,5 +65,12 @@ public class AuthorDaoJpa implements AuthorDao {
         query.setParameter("name", name);
         query.setParameter("id", id);
         query.executeUpdate();
+    }
+
+    @Override
+    public List<Author> getAuthorsByBook(Book book) {
+        TypedQuery<Author> query = entityManager.createQuery("select a from Author a where a.book=:book", Author.class);
+        query.setParameter("book", book);
+        return query.getResultList();
     }
 }

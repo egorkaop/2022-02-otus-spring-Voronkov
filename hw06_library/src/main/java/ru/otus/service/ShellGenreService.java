@@ -12,4 +12,6 @@ public interface ShellGenreService {
     void deleteGenreById();
 
     void updateGenreNameById();
+
+    void getAllGenresByBookId();
 }

@@ -3,16 +3,16 @@ package ru.otus.dao.impl;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.dao.GenreDao;
+import ru.otus.domain.Book;
 import ru.otus.domain.Genre;
 import ru.otus.exceptions.GenreNotFoundException;
 
-import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
-@Transactional
+
 @Repository
 public class GenreDaoJpa implements GenreDao {
     private final EntityManager entityManager;
@@ -28,18 +28,14 @@ public class GenreDaoJpa implements GenreDao {
 
     @Override
     public Genre getGenreById(long id) {
-        EntityGraph<?> entityGraph = entityManager.getEntityGraph("genre-books-eg");
         TypedQuery<Genre> query = entityManager.createQuery("select g from Genre g where g.id=:id", Genre.class);
         query.setParameter("id", id);
-        query.setHint("javax.persistence.fetchgraph", entityGraph);
         return query.getSingleResult();
     }
 
     @Override
     public List<Genre> getAllGenre() {
-        EntityGraph<?> entityGraph = entityManager.getEntityGraph("genre-books-eg");
         TypedQuery<Genre> query = entityManager.createQuery("select g from Genre g", Genre.class);
-        query.setHint("javax.persistence.fetchgraph", entityGraph);
         return query.getResultList();
     }
 
@@ -68,5 +64,12 @@ public class GenreDaoJpa implements GenreDao {
         query.setParameter("name", name);
         query.setParameter("id", id);
         query.executeUpdate();
+    }
+
+    @Override
+    public List<Genre> getGenresByBook(Book book) {
+        TypedQuery<Genre> query = entityManager.createQuery("select g from Genre g where g.book=:book", Genre.class);
+        query.setParameter("book", book);
+        return query.getResultList();
     }
 }

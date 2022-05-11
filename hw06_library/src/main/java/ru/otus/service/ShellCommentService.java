@@ -5,11 +5,11 @@ public interface ShellCommentService {
 
     void getCommentByID();
 
-    void getAllComments();
-
     void insertComment();
 
     void deleteCommentById();
 
     void updateCommentTextById();
+
+    void getAllCommentsByBookId();
 }

@@ -2,20 +2,20 @@ package ru.otus.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import ru.otus.domain.Author;
-import ru.otus.domain.Genre;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
 public class BookDto {
     private String title;
-    private Author author;
-    private Genre genre;
+    private List<AuthorDto> authors;
+    private List<GenreDto> genres;
 
     @Override
     public String toString() {
         return "title='" + title + '\'' +
-                ", author=" + author.getName() + " " + author.getSurname() +
-                ", genre=" + genre.getName();
+                ", authors=" + authors.toString() +
+                ", genres=" + genres.toString();
     }
 }

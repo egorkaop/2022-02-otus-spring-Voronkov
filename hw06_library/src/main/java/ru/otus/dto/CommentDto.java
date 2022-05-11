@@ -7,11 +7,9 @@ import lombok.Data;
 @AllArgsConstructor
 public class CommentDto {
     private String text;
-    private BookDto bookDto;
 
     @Override
     public String toString() {
-        return "text='" + text + '\'' +
-                ", bookDto=" + bookDto;
+        return "text='" + text;
     }
 }

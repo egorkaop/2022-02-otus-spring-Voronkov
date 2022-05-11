@@ -13,7 +13,7 @@ import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-@DisplayName("ао комментариев должно ")
+@DisplayName("дао комментариев должно ")
 @DataJpaTest
 @Import(CommentDaoJpa.class)
 class CommentDaoJpaTest {
@@ -22,7 +22,7 @@ class CommentDaoJpaTest {
     @Autowired
     private CommentDaoJpa commentDaoJpa;
 
-    private static final long EXPECTED_COUNT_OF_COMMENTS = 1;
+    private static final long EXPECTED_COUNT_OF_COMMENTS = 2;
     private static final long EXISTING_COMMENT_ID = 1;
     private static final String EXISTING_COMMENT_TEXT = "Хорошая книга";
 
@@ -41,22 +41,6 @@ class CommentDaoJpaTest {
         assertThat(actualComment).isEqualTo(expectedComment);
     }
 
-    @Test
-    @DisplayName("правильно возвращать список комментариев")
-    void shouldReturnCorrectListOfComments() {
-        List<Comment> expectedCommentList = List.of(testEntityManager.find(Comment.class, EXISTING_COMMENT_ID));
-        List<Comment> actualCommentList = commentDaoJpa.getAllComment();
-        assertThat(actualCommentList).isEqualTo(expectedCommentList);
-    }
-
-    @Test
-    @DisplayName("добавлять комментарий")
-    void shouldInsertComment() {
-        Comment expectedComment = new Comment(new Book("it", 1, 1), "good");
-        commentDaoJpa.insertComment(expectedComment);
-        Comment actualComment = commentDaoJpa.getCommentById(2);
-        assertThat(actualComment).isEqualTo(expectedComment);
-    }
 
     @Test
     @DisplayName("удалять комментарий")

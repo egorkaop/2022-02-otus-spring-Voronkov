@@ -28,11 +28,6 @@ public class CommentCommands {
         shellCommentService.getCommentByID();
     }
 
-    @ShellMethod(value = "commentGetAll", key = {"cgall", "commentGetAll"})
-    public void commentGetAll() {
-        shellCommentService.getAllComments();
-    }
-
     @ShellMethod(value = "commentDeleteById", key = {"cd", "commentDeleteById"})
     public void commentDeleteById() {
         shellCommentService.deleteCommentById();
@@ -42,5 +37,10 @@ public class CommentCommands {
     @ShellMethod(value = "commentTextUpdateById", key = {"cu", "commentTextUpdateById"})
     public void commentTextUpdateById() {
         shellCommentService.updateCommentTextById();
+    }
+
+    @ShellMethod(value = "commentTextByBookId",key = {"cgb","commentTextByBookId"})
+    public void commentTextByBookId(){
+        shellCommentService.getAllCommentsByBookId();
     }
 }

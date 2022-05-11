@@ -2,6 +2,7 @@ package ru.otus.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.otus.dao.BookDao;
 import ru.otus.dao.CommentDao;
 import ru.otus.domain.Book;
@@ -24,11 +25,13 @@ public class ShellCommentServiceImpl implements ShellCommentService {
 
 
     @Override
+    @Transactional(readOnly = true)
     public void getCommentCount() {
         ioService.outputText("Количество комментариев: " + commentDao.count());
     }
 
     @Override
+    @Transactional(readOnly = true)
     public void getCommentByID() {
         ioService.outputText("Введите id комментария");
         long id = Long.parseLong(ioService.inputText());
@@ -38,16 +41,10 @@ public class ShellCommentServiceImpl implements ShellCommentService {
         } catch (Exception e) {
             throw new CommentNotFoundException("По данному id комментарий не найден");
         }
-
     }
 
     @Override
-    public void getAllComments() {
-        List<CommentDto> commentDtoList = commentDtoMapper.convertListCommentsToDto(commentDao.getAllComment());
-        ioService.outputText(commentDtoList.toString());
-    }
-
-    @Override
+    @Transactional
     public void insertComment() {
         ioService.outputText("Введите текст комментария");
         String text = ioService.inputText();
@@ -58,6 +55,7 @@ public class ShellCommentServiceImpl implements ShellCommentService {
     }
 
     @Override
+    @Transactional
     public void deleteCommentById() {
         ioService.outputText("Введите id комментария для удаления");
         long id = Long.parseLong(ioService.inputText());
@@ -69,11 +67,22 @@ public class ShellCommentServiceImpl implements ShellCommentService {
     }
 
     @Override
+    @Transactional
     public void updateCommentTextById() {
         ioService.outputText("Введите id комментария для замены");
         long id = Long.parseLong(ioService.inputText());
         ioService.outputText("Введите новый текст комментария");
         String text = ioService.inputText();
         commentDao.updateCommentTextById(id, text);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public void getAllCommentsByBookId() {
+        ioService.outputText("Введите id книги");
+        long id = Long.parseLong(ioService.inputText());
+        Book book = bookDao.getBookById(id);
+        List<CommentDto> commentDtoList = commentDtoMapper.convertListCommentsToDto(commentDao.getCommentsByBookId(book));
+        ioService.outputText(commentDtoList.toString());
     }
 }
