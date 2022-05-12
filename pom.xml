@@ -13,6 +13,7 @@
       <module>hw04_studentTest</module>
     <module>hw05_library</module>
     <module>hw06_library</module>
+      <module>hw07_library</module>
   </modules>
 
 </project>
