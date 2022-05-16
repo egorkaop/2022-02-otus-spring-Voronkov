@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.dao.BookDao;
 import ru.otus.dao.GenreDao;
-import ru.otus.domain.Book;
 import ru.otus.domain.Genre;
 import ru.otus.dto.GenreDto;
 import ru.otus.exceptions.GenreNotFoundException;
@@ -79,14 +78,5 @@ public class ShellGenreServiceImpl implements ShellGenreService {
         ioService.outputText("Введите новое название жанра");
         String name = ioService.inputText();
         genreDao.updateGenreNameById(id, name);
-    }
-
-    @Override
-    public void getAllGenresByBookId() {
-        ioService.outputText("Введите id книги");
-        long id = Long.parseLong(ioService.inputText());
-        Book book = bookDao.getBookById(id);
-        List<GenreDto> genreList = genreDtoMapper.convertListGenresToDto(genreDao.getGenresByBook(book));
-        ioService.outputText(genreList.toString());
     }
 }

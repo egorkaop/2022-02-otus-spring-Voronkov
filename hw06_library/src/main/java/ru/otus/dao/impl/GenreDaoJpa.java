@@ -65,11 +65,4 @@ public class GenreDaoJpa implements GenreDao {
         query.setParameter("id", id);
         query.executeUpdate();
     }
-
-    @Override
-    public List<Genre> getGenresByBook(Book book) {
-        TypedQuery<Genre> query = entityManager.createQuery("select g from Genre g where g.book=:book", Genre.class);
-        query.setParameter("book", book);
-        return query.getResultList();
-    }
 }

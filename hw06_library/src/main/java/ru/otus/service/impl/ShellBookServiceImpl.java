@@ -43,7 +43,7 @@ public class ShellBookServiceImpl implements ShellBookService {
         long id = Long.parseLong(ioService.inputText());
         try {
             Book book = bookDao.getBookById(id);
-            BookDto bookDto = bookDtoMapper.convertBookToDto(addAuthorsAndGenresToBook(book));
+            BookDto bookDto = bookDtoMapper.convertBookToDto(book);
             ioService.outputText(bookDto.toString());
         } catch (Exception e) {
             throw new BookNotFoundException("По заданному id книги не найдено");
@@ -53,7 +53,7 @@ public class ShellBookServiceImpl implements ShellBookService {
     @Override
     @Transactional(readOnly = true)
     public void getAllBooks() {
-        List<Book> bookList = bookDao.getAllBook().stream().map(this::addAuthorsAndGenresToBook).collect(Collectors.toList());
+        List<Book> bookList = bookDao.getAllBook();
         List<BookDto> bookDtoList = bookDtoMapper.convertListBooksToDto(bookList);
         ioService.outputText(bookDtoList.toString());
     }
@@ -120,11 +120,5 @@ public class ShellBookServiceImpl implements ShellBookService {
             }
         }
         return genreList;
-    }
-
-    private Book addAuthorsAndGenresToBook(Book book){
-        book.setAuthors(authorDao.getAuthorsByBook(book));
-        book.setGenres(genreDao.getGenresByBook(book));
-        return book;
     }
 }

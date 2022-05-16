@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 
 @NoArgsConstructor
@@ -20,8 +21,8 @@ public class Author {
     private String name;
     @Column(name = "surname", nullable = false)
     private String surname;
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Book book;
+    @ManyToMany(mappedBy = "authors")
+    private List<Book> bookList;
 
 
     public Author(String name, String surname) {

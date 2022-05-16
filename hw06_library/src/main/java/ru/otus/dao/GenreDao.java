@@ -19,5 +19,4 @@ public interface GenreDao {
 
     void updateGenreNameById(long id, String name);
 
-    List<Genre> getGenresByBook(Book book);
 }

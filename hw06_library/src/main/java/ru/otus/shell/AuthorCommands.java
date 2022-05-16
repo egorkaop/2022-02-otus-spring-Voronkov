@@ -44,8 +44,4 @@ public class AuthorCommands {
         shellAuthorService.updateAuthorNameById();
     }
 
-    @ShellMethod(value = "getAllAuthorsByBook", key = {"agb","getAllAuthorsByBook"})
-    public void getAllAuthorsByBook(){
-        shellAuthorService.getAllAuthorsByBookId();
-    }
 }

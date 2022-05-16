@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.otus.dao.AuthorDao;
 import ru.otus.dao.GenreDao;
+import ru.otus.domain.Author;
 import ru.otus.domain.Book;
 import ru.otus.dto.AuthorDto;
 import ru.otus.dto.BookDto;

@@ -13,6 +13,5 @@ public interface ShellAuthorService {
 
     void updateAuthorNameById();
 
-    void getAllAuthorsByBookId();
 
 }

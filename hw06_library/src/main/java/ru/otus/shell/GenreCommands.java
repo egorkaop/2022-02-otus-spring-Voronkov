@@ -45,8 +45,4 @@ public class GenreCommands {
         shellGenreService.updateGenreNameById();
     }
 
-    @ShellMethod(value = "getAllGenreByBook",key = {"ggb","getAllGenreByBook"})
-    public void getAllGenreByBook(){
-        shellGenreService.getAllGenresByBookId();
-    }
 }

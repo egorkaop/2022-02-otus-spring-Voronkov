@@ -18,5 +18,4 @@ public interface AuthorDao {
 
     void updateAuthorNameById(long id, String name);
 
-    List<Author> getAuthorsByBook(Book book);
 }

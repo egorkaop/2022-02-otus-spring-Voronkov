@@ -83,15 +83,4 @@ public class ShellAuthorServiceImpl implements ShellAuthorService {
         String name = ioService.inputText();
         authorDao.updateAuthorNameById(id, name);
     }
-
-    @Override
-    @Transactional(readOnly = true)
-    public void getAllAuthorsByBookId() {
-        ioService.outputText("Введите id книги");
-        long id = Long.parseLong(ioService.inputText());
-        Book book = bookDao.getBookById(id);
-        List<AuthorDto> authorDtoList = authorDtoMapper.convertListAuthorsToDto(authorDao.getAuthorsByBook(book));
-        ioService.outputText(authorDtoList.toString());
-
-    }
 }
