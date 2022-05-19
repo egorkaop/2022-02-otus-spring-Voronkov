@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.dao.AuthorRepository;
+import ru.otus.dao.BookRepository;
 import ru.otus.domain.Author;
 import ru.otus.dto.AuthorDto;
 import ru.otus.exceptions.AuthorNotFoundException;
@@ -19,6 +20,7 @@ public class ShellAuthorServiceImpl implements ShellAuthorService {
     private final IOService ioService;
     private final AuthorDtoMapper authorDtoMapper;
     private final AuthorRepository authorRepository;
+    private final BookRepository bookRepository;
 
 
     @Override
@@ -84,7 +86,7 @@ public class ShellAuthorServiceImpl implements ShellAuthorService {
     public void getAllAuthorsByBookId() {
         ioService.outputText("Введите id книги");
         long id = Long.parseLong(ioService.inputText());
-        List<AuthorDto> authorDtoList = authorDtoMapper.convertListAuthorsToDto(authorRepository.findAuthorByBook_Id(id));
+        List<AuthorDto> authorDtoList = authorDtoMapper.convertListAuthorsToDto(authorRepository.findAuthorByBookListContains(bookRepository.getById(id)));
         ioService.outputText(authorDtoList.toString());
     }
 }

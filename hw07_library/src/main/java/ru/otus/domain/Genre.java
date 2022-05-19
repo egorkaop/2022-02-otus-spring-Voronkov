@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
+import java.util.List;
 
 
 @AllArgsConstructor
@@ -17,8 +18,8 @@ public class Genre {
     private long id;
     @Column(name = "name", nullable = false)
     private String name;
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Book book;
+    @ManyToMany(mappedBy = "genres")
+    private List<Book> bookList;
 
 
     public Genre(String name) {

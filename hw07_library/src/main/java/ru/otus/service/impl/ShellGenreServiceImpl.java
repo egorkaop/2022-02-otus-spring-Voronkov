@@ -3,8 +3,10 @@ package ru.otus.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.otus.dao.BookRepository;
 import ru.otus.dao.GenreRepository;
 import ru.otus.domain.Genre;
+import ru.otus.dto.AuthorDto;
 import ru.otus.dto.GenreDto;
 import ru.otus.exceptions.GenreNotFoundException;
 import ru.otus.service.IOService;
@@ -19,6 +21,7 @@ public class ShellGenreServiceImpl implements ShellGenreService {
     private final IOService ioService;
     private final GenreDtoMapper genreDtoMapper;
     private final GenreRepository genreRepository;
+    private final BookRepository bookRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -81,7 +84,7 @@ public class ShellGenreServiceImpl implements ShellGenreService {
     public void getAllGenresByBookId() {
         ioService.outputText("Введите id книги");
         long id = Long.parseLong(ioService.inputText());
-        List<GenreDto> genreList = genreDtoMapper.convertListGenresToDto(genreRepository.findByBook_Id(id));
-        ioService.outputText(genreList.toString());
+        List<GenreDto> genreDtoList = genreDtoMapper.convertListGenresToDto(genreRepository.findGenreByBookListContains(bookRepository.getById(id)));
+        ioService.outputText(genreDtoList.toString());
     }
 }

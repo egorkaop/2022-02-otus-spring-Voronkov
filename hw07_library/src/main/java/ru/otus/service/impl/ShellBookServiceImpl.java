@@ -41,7 +41,7 @@ public class ShellBookServiceImpl implements ShellBookService {
         long id = Long.parseLong(ioService.inputText());
         try {
             Book book = bookRepository.getById(id);
-            BookDto bookDto = bookDtoMapper.convertBookToDto(addAuthorsAndGenresToBook(book));
+            BookDto bookDto = bookDtoMapper.convertBookToDto(book);
             ioService.outputText(bookDto.toString());
         } catch (Exception e) {
             throw new BookNotFoundException("По заданному id книги не найдено");
@@ -51,9 +51,7 @@ public class ShellBookServiceImpl implements ShellBookService {
     @Override
     @Transactional(readOnly = true)
     public void getAllBooks() {
-        List<Book> bookList = bookRepository.findAll().stream()
-                .map(this::addAuthorsAndGenresToBook)
-                .collect(Collectors.toList());
+        List<Book> bookList = bookRepository.findAll();
         List<BookDto> bookDtoList = bookDtoMapper.convertListBooksToDto(bookList);
         ioService.outputText(bookDtoList.toString());
     }
@@ -120,11 +118,5 @@ public class ShellBookServiceImpl implements ShellBookService {
             }
         }
         return genreList;
-    }
-
-    private Book addAuthorsAndGenresToBook(Book book){
-        book.setAuthors(authorRepository.findAuthorByBook_Id(book.getId()));
-        book.setGenres(genreRepository.findByBook_Id(book.getId()));
-        return book;
     }
 }
