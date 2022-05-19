@@ -11,6 +11,8 @@
     <module>hw01-studentTest</module>
     <module>hw02_studentTest</module>
       <module>hw04_studentTest</module>
+    <module>hw05_library</module>
+    <module>hw06_library</module>
   </modules>
 
 </project>
