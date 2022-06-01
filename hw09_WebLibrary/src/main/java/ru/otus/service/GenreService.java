@@ -13,7 +13,7 @@ public interface GenreService {
 
     void insertGenre();
 
-    void deleteGenreById();
+    void deleteGenreById(long id);
 
     void updateGenreNameById();
 

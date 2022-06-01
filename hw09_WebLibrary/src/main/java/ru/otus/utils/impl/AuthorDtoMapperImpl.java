@@ -15,9 +15,10 @@ public class AuthorDtoMapperImpl implements AuthorDtoMapper {
 
     @Override
     public AuthorDto convertAuthorToDto(Author author) {
+        long id = author.getId();
         String name = author.getName();
         String surname = author.getSurname();
-        return new AuthorDto(name, surname);
+        return new AuthorDto(id,name, surname);
     }
 
     @Override

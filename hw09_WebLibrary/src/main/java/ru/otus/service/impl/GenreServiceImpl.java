@@ -43,9 +43,7 @@ public class GenreServiceImpl implements GenreService {
     @Override
     @Transactional(readOnly = true)
     public List<GenreDto> getAllGenres() {
-        List<GenreDto> genreDtoList = genreDtoMapper.convertListGenresToDto(genreRepository.findAll());
-        ioService.outputText(genreDtoList.toString());
-        return genreDtoList;
+        return genreDtoMapper.convertListGenresToDto(genreRepository.findAll());
     }
 
     @Override
@@ -59,9 +57,7 @@ public class GenreServiceImpl implements GenreService {
 
     @Override
     @Transactional
-    public void deleteGenreById() {
-        ioService.outputText("Введите id жанра для удаления");
-        long id = Long.parseLong(ioService.inputText());
+    public void deleteGenreById(long id) {
         try {
             genreRepository.deleteById(id);
         } catch (Exception e) {

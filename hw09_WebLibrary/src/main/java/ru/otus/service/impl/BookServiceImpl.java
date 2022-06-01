@@ -1,5 +1,8 @@
 package ru.otus.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,17 +15,14 @@ import ru.otus.domain.Genre;
 import ru.otus.dto.BookDto;
 import ru.otus.exceptions.AuthorNotFoundException;
 import ru.otus.exceptions.BookNotFoundException;
-import ru.otus.service.IOService;
 import ru.otus.service.BookService;
+import ru.otus.service.IOService;
 import ru.otus.utils.BookDtoMapper;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
+
     private final IOService ioService;
     private final BookDtoMapper bookDtoMapper;
     private final BookRepository bookRepository;
@@ -77,38 +77,53 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional
-    public void updateBookTitleById(long id,String title) {
-        bookRepository.updateBookTitleById(id,title);
+    public void updateBookTitleById(long id, String title) {
+        bookRepository.updateBookTitleById(id, title);
         System.out.println(id + title);
     }
 
+    @Override
+    public List<BookDto> getBooksByAuthorId(long id) {
+        Author author = authorRepository.getById(id);
+        List<Book> bookList = bookRepository.findAllByAuthorsContains(author);
+        return bookDtoMapper.convertListBooksToDto(bookList);
+    }
 
-    private List<Author> getListOfAuthors(){
+    @Override
+    public List<BookDto> getBooksByGenreId(long id) {
+        Genre genre = genreRepository.getById(id);
+        List<Book> bookList = bookRepository.findAllByGenresContains(genre);
+        return bookDtoMapper.convertListBooksToDto(bookList);
+    }
+
+
+    private List<Author> getListOfAuthors() {
         List<Author> authorList = new ArrayList<>();
-        while (true){
+        while (true) {
             ioService.outputText("Введите id автора");
-            long authorId=Long.parseLong(ioService.inputText());
+            long authorId = Long.parseLong(ioService.inputText());
             Optional.ofNullable(authorRepository.getById(authorId))
                     .map(authorList::add)
-                    .orElseThrow(() -> new AuthorNotFoundException("Вы ввели несуществующего автора"));
+                    .orElseThrow(
+                            () -> new AuthorNotFoundException("Вы ввели несуществующего автора"));
             ioService.outputText("Есть ли ещё автор? yes/no");
-            if(!ioService.inputText().equals("yes")){
+            if (!ioService.inputText().equals("yes")) {
                 break;
             }
         }
         return authorList;
     }
 
-    private List<Genre> getListOfGenres(){
+    private List<Genre> getListOfGenres() {
         List<Genre> genreList = new ArrayList<>();
-        while (true){
+        while (true) {
             ioService.outputText("Введите id жанра");
-            long genreId=Long.parseLong(ioService.inputText());
+            long genreId = Long.parseLong(ioService.inputText());
             Optional.ofNullable(genreRepository.getById(genreId))
                     .map(genreList::add)
                     .orElseThrow(() -> new AuthorNotFoundException("Вы ввели несуществующий жанр"));
             ioService.outputText("Есть ли ещё жанр? yes/no");
-            if(!ioService.inputText().equals("yes")){
+            if (!ioService.inputText().equals("yes")) {
                 break;
             }
         }

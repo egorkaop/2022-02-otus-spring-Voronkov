@@ -57,9 +57,7 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     @Transactional
-    public void deleteAuthorById() {
-        ioService.outputText("Введите id автора для удаления");
-        long id = Long.parseLong(ioService.inputText());
+    public void deleteAuthorById(long id) {
         try {
             authorRepository.deleteById(id);
         } catch (Exception e) {

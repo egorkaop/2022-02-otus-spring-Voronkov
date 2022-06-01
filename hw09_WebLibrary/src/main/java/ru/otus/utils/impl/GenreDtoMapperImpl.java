@@ -15,8 +15,9 @@ public class GenreDtoMapperImpl implements GenreDtoMapper {
 
     @Override
     public GenreDto convertGenreToDto(Genre genre) {
+        long id = genre.getId();
         String name = genre.getName();
-        return new GenreDto(name);
+        return new GenreDto(id,name);
     }
 
     @Override

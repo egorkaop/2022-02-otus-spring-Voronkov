@@ -53,4 +53,17 @@ public class BookController {
     public String insertPage(){
         return "/bookInsert";
     }
+
+    @GetMapping("/booksByAuthor")
+    public String getBooksByAuthor(@RequestParam("id") long id,Model model){
+        List<BookDto> bookDtoList = bookService.getBooksByAuthorId(id);
+        model.addAttribute("books",bookDtoList);
+        return "bookList";
+    }
+    @GetMapping("/booksByGenre")
+    public String getBooksByGenre(@RequestParam("id") long id, Model model){
+        List<BookDto> bookDtoList = bookService.getBooksByGenreId(id);
+        model.addAttribute("books",bookDtoList);
+        return "bookList";
+    }
 }

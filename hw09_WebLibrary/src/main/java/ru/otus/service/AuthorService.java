@@ -13,7 +13,7 @@ public interface AuthorService {
 
     void insertAuthor();
 
-    void deleteAuthorById();
+    void deleteAuthorById(long id);
 
     void updateAuthorNameById();
 
