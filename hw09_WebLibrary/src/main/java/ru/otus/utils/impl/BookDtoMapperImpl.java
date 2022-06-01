@@ -21,10 +21,11 @@ public class BookDtoMapperImpl implements BookDtoMapper {
 
     @Override
     public BookDto convertBookToDto(Book book) {
+        long id = book.getId();
         String title = book.getTitle();
         List<AuthorDto> authorDtoList = authorDtoMapper.convertListAuthorsToDto(book.getAuthors());
         List<GenreDto> genreDtoList = genreDtoMapper.convertListGenresToDto(book.getGenres());
-        return new BookDto(title, authorDtoList, genreDtoList);
+        return new BookDto(id,title, authorDtoList, genreDtoList);
     }
 
     @Override

@@ -13,7 +13,7 @@ import ru.otus.dto.BookDto;
 import ru.otus.exceptions.AuthorNotFoundException;
 import ru.otus.exceptions.BookNotFoundException;
 import ru.otus.service.IOService;
-import ru.otus.service.ShellBookService;
+import ru.otus.service.BookService;
 import ru.otus.utils.BookDtoMapper;
 
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class ShellBookServiceImpl implements ShellBookService {
+public class BookServiceImpl implements BookService {
     private final IOService ioService;
     private final BookDtoMapper bookDtoMapper;
     private final BookRepository bookRepository;
@@ -31,19 +31,17 @@ public class ShellBookServiceImpl implements ShellBookService {
 
     @Override
     @Transactional(readOnly = true)
-    public void getBookCount() {
-        ioService.outputText("Количество книг: " + bookRepository.count());
+    public long getBookCount() {
+        return bookRepository.count();
     }
 
     @Override
     @Transactional(readOnly = true)
-    public void getBookByID() {
-        ioService.outputText("Введите id книги");
-        long id = Long.parseLong(ioService.inputText());
+    public BookDto getBookByID(long id) {
         try {
             Book book = bookRepository.getById(id);
             BookDto bookDto = bookDtoMapper.convertBookToDto(book);
-            ioService.outputText(bookDto.toString());
+            return bookDto;
         } catch (Exception e) {
             throw new BookNotFoundException("По заданному id книги не найдено");
         }
@@ -51,10 +49,10 @@ public class ShellBookServiceImpl implements ShellBookService {
 
     @Override
     @Transactional(readOnly = true)
-    public void getAllBooks() {
+    public List<BookDto> getAllBooks() {
         List<Book> bookList = bookRepository.findAll();
         List<BookDto> bookDtoList = bookDtoMapper.convertListBooksToDto(bookList);
-        ioService.outputText(bookDtoList.toString());
+        return bookDtoList;
     }
 
     @Override
@@ -69,9 +67,7 @@ public class ShellBookServiceImpl implements ShellBookService {
 
     @Override
     @Transactional
-    public void deleteBookById() {
-        ioService.outputText("Введите id ниги для удаления");
-        long id = Long.parseLong(ioService.inputText());
+    public void deleteBookById(long id) {
         try {
             bookRepository.deleteById(id);
         } catch (Exception e) {
@@ -81,13 +77,11 @@ public class ShellBookServiceImpl implements ShellBookService {
 
     @Override
     @Transactional
-    public void updateBookTitleById() {
-        ioService.outputText("Введите id книги для замены");
-        long id = Long.parseLong(ioService.inputText());
-        ioService.outputText("Введите новое название книги");
-        String title = ioService.inputText();
+    public void updateBookTitleById(long id,String title) {
         bookRepository.updateBookTitleById(id,title);
+        System.out.println(id + title);
     }
+
 
     private List<Author> getListOfAuthors(){
         List<Author> authorList = new ArrayList<>();

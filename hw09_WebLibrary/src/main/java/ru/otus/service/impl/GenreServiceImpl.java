@@ -9,14 +9,14 @@ import ru.otus.domain.Genre;
 import ru.otus.dto.GenreDto;
 import ru.otus.exceptions.GenreNotFoundException;
 import ru.otus.service.IOService;
-import ru.otus.service.ShellGenreService;
+import ru.otus.service.GenreService;
 import ru.otus.utils.GenreDtoMapper;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ShellGenreServiceImpl implements ShellGenreService {
+public class GenreServiceImpl implements GenreService {
     private final IOService ioService;
     private final GenreDtoMapper genreDtoMapper;
     private final GenreRepository genreRepository;
@@ -24,18 +24,17 @@ public class ShellGenreServiceImpl implements ShellGenreService {
 
     @Override
     @Transactional(readOnly = true)
-    public void getGenreCount() {
-        ioService.outputText("Количество жанров: " + genreRepository.count());
+    public long getGenreCount() {
+        return genreRepository.count();
     }
 
     @Override
     @Transactional(readOnly = true)
-    public void getGenreByID() {
-        ioService.outputText("Введите id жанра");
-        long id = Long.parseLong(ioService.inputText());
+    public GenreDto getGenreByID(long id) {
         try {
             GenreDto genreDto = genreDtoMapper.convertGenreToDto(genreRepository.getById(id));
             ioService.outputText(genreDto.toString());
+            return genreDto;
         } catch (Exception e) {
             throw new GenreNotFoundException("По заданному id жанр не найден");
         }
@@ -43,9 +42,10 @@ public class ShellGenreServiceImpl implements ShellGenreService {
 
     @Override
     @Transactional(readOnly = true)
-    public void getAllGenres() {
+    public List<GenreDto> getAllGenres() {
         List<GenreDto> genreDtoList = genreDtoMapper.convertListGenresToDto(genreRepository.findAll());
         ioService.outputText(genreDtoList.toString());
+        return genreDtoList;
     }
 
     @Override
@@ -80,10 +80,11 @@ public class ShellGenreServiceImpl implements ShellGenreService {
     }
 
     @Override
-    public void getAllGenresByBookId() {
+    public List<GenreDto> getAllGenresByBookId() {
         ioService.outputText("Введите id книги");
         long id = Long.parseLong(ioService.inputText());
         List<GenreDto> genreDtoList = genreDtoMapper.convertListGenresToDto(genreRepository.findGenreByBookListContains(bookRepository.getById(id)));
         ioService.outputText(genreDtoList.toString());
+        return genreDtoList;
     }
 }

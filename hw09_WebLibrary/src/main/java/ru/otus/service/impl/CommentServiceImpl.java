@@ -10,14 +10,14 @@ import ru.otus.domain.Comment;
 import ru.otus.dto.CommentDto;
 import ru.otus.exceptions.CommentNotFoundException;
 import ru.otus.service.IOService;
-import ru.otus.service.ShellCommentService;
+import ru.otus.service.CommentService;
 import ru.otus.utils.CommentDtoMapper;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ShellCommentServiceImpl implements ShellCommentService {
+public class CommentServiceImpl implements CommentService {
     private final IOService ioService;
     private final CommentDtoMapper commentDtoMapper;
     private final CommentRepository commentRepository;
@@ -26,18 +26,16 @@ public class ShellCommentServiceImpl implements ShellCommentService {
 
     @Override
     @Transactional(readOnly = true)
-    public void getCommentCount() {
-        ioService.outputText("Количество комментариев: " + commentRepository.count());
+    public long getCommentCount() {
+        return commentRepository.count();
     }
 
     @Override
     @Transactional(readOnly = true)
-    public void getCommentByID() {
-        ioService.outputText("Введите id комментария");
-        long id = Long.parseLong(ioService.inputText());
+    public CommentDto getCommentByID(long id) {
         try {
             CommentDto commentDto = commentDtoMapper.convertCommentToDto(commentRepository.getById(id));
-            ioService.outputText(commentDto.toString());
+            return commentDto;
         } catch (Exception e) {
             throw new CommentNotFoundException("По данному id комментарий не найден");
         }
@@ -78,10 +76,11 @@ public class ShellCommentServiceImpl implements ShellCommentService {
 
     @Override
     @Transactional(readOnly = true)
-    public void getAllCommentsByBookId() {
+    public List<CommentDto> getAllCommentsByBookId() {
         ioService.outputText("Введите id книги");
         long id = Long.parseLong(ioService.inputText());
         List<CommentDto> commentDtoList = commentDtoMapper.convertListCommentsToDto(commentRepository.findByBook_Id(id));
         ioService.outputText(commentDtoList.toString());
+        return commentDtoList;
     }
 }

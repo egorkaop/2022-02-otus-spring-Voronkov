@@ -9,14 +9,14 @@ import ru.otus.domain.Author;
 import ru.otus.dto.AuthorDto;
 import ru.otus.exceptions.AuthorNotFoundException;
 import ru.otus.service.IOService;
-import ru.otus.service.ShellAuthorService;
+import ru.otus.service.AuthorService;
 import ru.otus.utils.AuthorDtoMapper;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ShellAuthorServiceImpl implements ShellAuthorService {
+public class AuthorServiceImpl implements AuthorService {
     private final IOService ioService;
     private final AuthorDtoMapper authorDtoMapper;
     private final AuthorRepository authorRepository;
@@ -25,18 +25,15 @@ public class ShellAuthorServiceImpl implements ShellAuthorService {
 
     @Override
     @Transactional(readOnly = true)
-    public void getAuthorCount() {
-        ioService.outputText("Количество авторов: " + authorRepository.count());
+    public long getAuthorCount() {
+        return authorRepository.count();
     }
 
     @Override
     @Transactional(readOnly = true)
-    public void getAuthorByID() {
-        ioService.outputText("Введите id автора");
-        long id = Long.parseLong(ioService.inputText());
+    public AuthorDto getAuthorByID(long id) {
         try {
-            AuthorDto authorDto = authorDtoMapper.convertAuthorToDto(authorRepository.getById(id));
-            ioService.outputText(authorDto.toString());
+            return authorDtoMapper.convertAuthorToDto(authorRepository.getById(id));
         } catch (Exception e) {
             throw new AuthorNotFoundException("По задданому id автор не найден");
         }
@@ -44,9 +41,8 @@ public class ShellAuthorServiceImpl implements ShellAuthorService {
 
     @Override
     @Transactional(readOnly = true)
-    public void getAllAuthors() {
-        List<AuthorDto> authorDtoList = authorDtoMapper.convertListAuthorsToDto(authorRepository.findAll());
-        ioService.outputText(authorDtoList.toString());
+    public List<AuthorDto> getAllAuthors() {
+        return authorDtoMapper.convertListAuthorsToDto(authorRepository.findAll());
     }
 
     @Override
@@ -83,10 +79,11 @@ public class ShellAuthorServiceImpl implements ShellAuthorService {
 
     @Override
     @Transactional(readOnly = true)
-    public void getAllAuthorsByBookId() {
+    public List<AuthorDto> getAllAuthorsByBookId() {
         ioService.outputText("Введите id книги");
         long id = Long.parseLong(ioService.inputText());
         List<AuthorDto> authorDtoList = authorDtoMapper.convertListAuthorsToDto(authorRepository.findAuthorByBookListContains(bookRepository.getById(id)));
         ioService.outputText(authorDtoList.toString());
+        return authorDtoList;
     }
 }

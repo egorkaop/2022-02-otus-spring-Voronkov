@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>List of all persons</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        .books {
+            border: 1px solid steelblue;
+            width: 600px;
+            border-collapse: collapse;
+        }
+
+        .books tr td, th {
+            padding: 5px;
+            border: 1px solid steelblue;
+        }
+
+        .persons td:last-child, td:first-child {
+            width: 50px;
+        }
+    </style>
+</head>
+<body>
+<h3>Books:</h3>
+<a href="bookInsert.html" th:href="@{/bookInsert}">Insert Book</a>
+
+<table class="books">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Authors</th>
+        <th>Action1</th>
+        <th>Action2</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="book : ${books}">
+        <td th:text="${book.id}">1</td>
+        <td th:text="${book.title}">John Doe</td>
+        <td>
+            <a href="bookEdit.html" th:href="@{/bookEdit(id=${book.id})}">Edit</a>
+        </td>
+        <td>
+            <a href="bookList.html" th:href="@{/bookDelete(id=${book.id})}">Delete</a>
+        </td>
+        <td>
+            <a href="bookList.html" th:href="@{/bookFull(id=${book.id})}">Full information</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
