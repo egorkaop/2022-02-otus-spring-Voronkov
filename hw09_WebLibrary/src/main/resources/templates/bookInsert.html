@@ -9,13 +9,8 @@
             padding: 50px;
         }
 
-        label {
-            display: inline-block;
+        select {
             width: 100px;
-        }
-
-        input:read-only {
-            background: lightgray;
         }
 
         .row {
@@ -24,20 +19,30 @@
     </style>
 </head>
 
+
 <!-- Person edition -->
-<form id="edit-form" action="bookInsert.html" th:method="post" th:action="@{/bookInsert}" th:object="${book}">
-    <h3>Book Info:</h3>
-
+<form id="edit-form" action="bookInsert.html" th:method="post" th:action="@{/bookInsert}" th:object="${authors}">
+    <h3 th:text="#{book-info}">Book Info:</h3>
     <div class="row">
-        <label for="id-input">ID:</label>
-        <input id="id-input" name ="id"type="text"/>
+        <label for="book-title-input" th:text="#{title}">title:</label>
+        <input id="book-title-input" name="title" type="text"/>
     </div>
-
-    <div class="row">
-        <label for="book-title-input">Name:</label>
-        <input id="book-title-input" name="title" type="text" th:value="*{title}" value="John Doe"/>
+    <div>
+        <label for="authors">Hold down the Ctrl (windows) or Command (Mac) button to choose authors:</label>
     </div>
-
+    <div>
+    <select multiple size="3" name="authors" th:name="authors" id="authors" th:id="authors">
+        <option th:each="author : ${authors}" th:text="${author.id}"/>
+    </select>
+    </div>
+    <div>
+        <label for="genres">Hold down the Ctrl (windows) or Command (Mac) button to choose genres:</label>
+    </div>
+    <div>
+        <select multiple size="3" name="genres" th:name="genres" id="genres" th:id="genres">
+            <option th:each="genre : ${genres}" th:text="${genre.id}"/>
+        </select>
+    </div>
     <div class="row">
         <button type="submit" th:text="Save">Save</button>
         <a href="bookList.html" th:href="@{/bookList}"><button type="button" th:text="Cansel">Cancel</button></a>

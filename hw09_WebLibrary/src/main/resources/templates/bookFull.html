@@ -25,15 +25,15 @@
     </style>
 </head>
 <body>
-<h3>Book:</h3>
+<h3 th:text="#{book-info}">Book:</h3>
 
 <table class="book">
     <thead>
     <tr>
         <th>ID</th>
-        <th>Name</th>
-        <th th:each="author : ${book.authors}">Author</th>
-        <th th:each="genre : ${book.genres}">Genre</th>
+        <th th:text="#{title}">Name</th>
+        <th th:each="author : ${book.authors}" th:text="#{authors}">Author</th>
+        <th th:each="genre : ${book.genres}" th:text="#{genres}">Genre</th>
     </tr>
     </thead>
     <tbody>

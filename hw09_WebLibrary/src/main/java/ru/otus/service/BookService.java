@@ -12,7 +12,7 @@ public interface BookService {
 
     List<BookDto> getAllBooks();
 
-    void insertBook();
+    void insertBook(String title, long[] authorsId,long[] genresId);
 
     void deleteBookById(long id);
 

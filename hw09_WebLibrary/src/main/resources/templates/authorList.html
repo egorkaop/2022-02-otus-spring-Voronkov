@@ -25,15 +25,15 @@
   </style>
 </head>
 <body>
-<h3>Authors:</h3>
+<h3 th:text="#{authors}">Authors:</h3>
 
 <table class="authors">
   <thead>
   <tr>
     <th>ID</th>
-    <th>Name</th>
-    <th>Action</th>
-    <th>Action</th>
+    <th th:text="#{name}">Name</th>
+    <th th:text="#{action}">Action</th>
+    <th th:text="#{action}">Action</th>
   </tr>
   </thead>
   <tbody>
@@ -41,10 +41,10 @@
     <td th:text="${author.id}">1</td>
     <td th:text="${author.name} + ' ' + ${author.surname}">John Doe</td>
     <td>
-      <a href="authorList.html" th:href="@{/authorDelete(id=${author.id})}">Delete</a>
+      <a href="authorList.html" th:href="@{/authorDelete(id=${author.id})}" th:text="#{delete-action}">Delete</a>
     </td>
     <td>
-      <a href="bookList.html" th:href="@{/booksByAuthor(id=${author.id})}">Books by author</a>
+      <a href="bookList.html" th:href="@{/booksByAuthor(id=${author.id})}" th:text="#{books-by-author-action}">Books by author</a>
     </td>
   </tr>
   </tbody>

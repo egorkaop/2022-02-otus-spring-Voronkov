@@ -25,15 +25,15 @@
   </style>
 </head>
 <body>
-<h3>Genres:</h3>
+<h3 th:text="#{genres}">Genres:</h3>
 
 <table class="genres">
   <thead>
   <tr>
     <th>ID</th>
-    <th>Name</th>
-    <th>Action</th>
-    <th>Action</th>
+    <th th:text="#{title}">Name</th>
+    <th th:text="#{action}">Action</th>
+    <th th:text="#{action}">Action</th>
   </tr>
   </thead>
   <tbody>
@@ -41,10 +41,10 @@
     <td th:text="${genre.id}">1</td>
     <td th:text="${genre.name}">John Doe</td>
     <td>
-      <a href="genreList.html" th:href="@{/genreDelete(id=${genre.id})}">Delete</a>
+      <a href="genreList.html" th:href="@{/genreDelete(id=${genre.id})}" th:text="#{delete-action}">Delete</a>
     </td>
     <td>
-      <a href="bookList.html" th:href="@{/booksByGenre(id=${genre.id})}">Books by genre</a>
+      <a href="bookList.html" th:href="@{/booksByGenre(id=${genre.id})}" th:text="#{books-by-genre-action}">Books by genre</a>
     </td>
   </tr>
   </tbody>

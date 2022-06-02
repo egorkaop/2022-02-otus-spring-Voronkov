@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <title>List of all persons</title>
+    <title>List of all books</title>
     <style type="text/css">
         body {
             padding: 50px;
@@ -25,17 +25,18 @@
     </style>
 </head>
 <body>
-<h3>Books:</h3>
-<a href="bookInsert.html" th:href="@{/bookInsert}">Insert Book</a>
+
+<h3 th:text="#{books}">Books:</h3>
+<a href="bookInsert.html" th:href="@{/bookInsert}" th:text="#{insert-book}">Insert Book</a>
 
 <table class="books">
     <thead>
     <tr>
         <th>ID</th>
-        <th>Name</th>
-        <th>Authors</th>
-        <th>Action1</th>
-        <th>Action2</th>
+        <th th:text="#{title}">Title</th>
+        <th th:text="#{authors}">Authors</th>
+        <th th:text="#{action}">Action</th>
+        <th th:text="#{action}">Action</th>
     </tr>
     </thead>
     <tbody>
@@ -43,13 +44,13 @@
         <td th:text="${book.id}">1</td>
         <td th:text="${book.title}">John Doe</td>
         <td>
-            <a href="bookEdit.html" th:href="@{/bookEdit(id=${book.id})}">Edit</a>
+            <a href="bookEdit.html" th:href="@{/bookEdit(id=${book.id})}" th:text="#{edit-acton}">Edit</a>
         </td>
         <td>
-            <a href="bookList.html" th:href="@{/bookDelete(id=${book.id})}">Delete</a>
+            <a href="bookList.html" th:href="@{/bookDelete(id=${book.id})}" th:text="#{delete-action}">Delete</a>
         </td>
         <td>
-            <a href="bookList.html" th:href="@{/bookFull(id=${book.id})}">Full information</a>
+            <a href="bookList.html" th:href="@{/bookFull(id=${book.id})}" th:text="#{full-info-action}">Full information</a>
         </td>
     </tr>
     </tbody>

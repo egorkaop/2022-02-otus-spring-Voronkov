@@ -14,7 +14,7 @@ import ru.otus.service.BookService;
 public class MainController {
 
 
-    @GetMapping
+    @GetMapping("/")
     public String mainPage(Model model){
         return "mainPage";
     }

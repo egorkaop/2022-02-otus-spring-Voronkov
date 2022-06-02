@@ -1,8 +1,11 @@
 package ru.otus.service.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,11 +60,9 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional
-    public void insertBook() {
-        ioService.outputText("Введите название книги");
-        String title = ioService.inputText();
-        List<Author> authors = getListOfAuthors();
-        List<Genre> genres = getListOfGenres();
+    public void insertBook(String title, long[] authorsId,long[] genresId) {
+        List<Author> authors = getListOfAuthors(authorsId);
+        List<Genre> genres = getListOfGenres(genresId);
         bookRepository.save(new Book(title, authors, genres));
     }
 
@@ -97,36 +98,17 @@ public class BookServiceImpl implements BookService {
     }
 
 
-    private List<Author> getListOfAuthors() {
-        List<Author> authorList = new ArrayList<>();
-        while (true) {
-            ioService.outputText("Введите id автора");
-            long authorId = Long.parseLong(ioService.inputText());
-            Optional.ofNullable(authorRepository.getById(authorId))
-                    .map(authorList::add)
-                    .orElseThrow(
-                            () -> new AuthorNotFoundException("Вы ввели несуществующего автора"));
-            ioService.outputText("Есть ли ещё автор? yes/no");
-            if (!ioService.inputText().equals("yes")) {
-                break;
-            }
-        }
+    private List<Author> getListOfAuthors(long[] authorsId) {
+        List<Author> authorList = Arrays.stream(authorsId)
+                .mapToObj(authorRepository::getById)
+                .collect(Collectors.toList());
         return authorList;
     }
 
-    private List<Genre> getListOfGenres() {
-        List<Genre> genreList = new ArrayList<>();
-        while (true) {
-            ioService.outputText("Введите id жанра");
-            long genreId = Long.parseLong(ioService.inputText());
-            Optional.ofNullable(genreRepository.getById(genreId))
-                    .map(genreList::add)
-                    .orElseThrow(() -> new AuthorNotFoundException("Вы ввели несуществующий жанр"));
-            ioService.outputText("Есть ли ещё жанр? yes/no");
-            if (!ioService.inputText().equals("yes")) {
-                break;
-            }
-        }
+    private List<Genre> getListOfGenres(long[] genresId) {
+        List<Genre> genreList = Arrays.stream(genresId)
+                .mapToObj(genreRepository::getById)
+                .collect(Collectors.toList());
         return genreList;
     }
 }

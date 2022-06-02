@@ -8,15 +8,22 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import ru.otus.dto.AuthorDto;
 import ru.otus.dto.BookDto;
+import ru.otus.dto.GenreDto;
+import ru.otus.service.AuthorService;
 import ru.otus.service.BookService;
+import ru.otus.service.GenreService;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
 public class BookController {
     private final BookService bookService;
+    private final AuthorService authorService;
+    private final GenreService genreService;
     @GetMapping("/bookList")
     public String listBook(Model model){
         List<BookDto> bookDto = bookService.getAllBooks();
@@ -38,9 +45,11 @@ public class BookController {
     }
 
     @GetMapping("/bookDelete")
-    public String deleteBook(@RequestParam("id") long id){
+    public String deleteBook(@RequestParam("id") long id, HttpServletRequest request){
+        String refer = request.getHeader("Referer");
         bookService.deleteBookById(id);
-        return "redirect:/bookList";
+//        return "redirect:/bookList";
+        return "redirect:" + refer;
     }
     @GetMapping("/bookFull")
     public String getFullBook(@RequestParam("id") long id,Model model){
@@ -50,8 +59,17 @@ public class BookController {
     }
 
     @GetMapping("/bookInsert")
-    public String insertPage(){
+    public String insertPage(Model model){
+        List<AuthorDto> authorDtoList = authorService.getAllAuthors();
+        List<GenreDto> genreDtoList = genreService.getAllGenres();
+        model.addAttribute("authors",authorDtoList);
+        model.addAttribute("genres",genreDtoList);
         return "/bookInsert";
+    }
+    @PostMapping("/bookInsert")
+    public String insertBook(String title, long[] authors, long[] genres){
+        bookService.insertBook(title,authors,genres);
+        return "redirect:/bookList";
     }
 
     @GetMapping("/booksByAuthor")
@@ -66,4 +84,5 @@ public class BookController {
         model.addAttribute("books",bookDtoList);
         return "bookList";
     }
+
 }
