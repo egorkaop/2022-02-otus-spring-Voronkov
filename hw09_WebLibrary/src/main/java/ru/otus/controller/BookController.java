@@ -3,11 +3,9 @@ package ru.otus.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import ru.otus.dto.AuthorDto;
 import ru.otus.dto.BookDto;
 import ru.otus.dto.GenreDto;
@@ -16,6 +14,7 @@ import ru.otus.service.BookService;
 import ru.otus.service.GenreService;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -37,9 +36,13 @@ public class BookController {
         model.addAttribute("book",bookDto);
         return "bookEdit";
     }
-
+    @Validated
     @PostMapping("/bookEdit")
-    public String saveBook(@ModelAttribute BookDto book) {
+    public String saveBook(@Valid @ModelAttribute("book") BookDto book,
+                           BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            return "bookEdit";
+        }
         bookService.updateBookTitleById(book.getId(), book.getTitle());
         return "redirect:/bookList";
     }
@@ -48,7 +51,6 @@ public class BookController {
     public String deleteBook(@RequestParam("id") long id, HttpServletRequest request){
         String refer = request.getHeader("Referer");
         bookService.deleteBookById(id);
-//        return "redirect:/bookList";
         return "redirect:" + refer;
     }
     @GetMapping("/bookFull")

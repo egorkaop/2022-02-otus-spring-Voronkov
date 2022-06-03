@@ -80,7 +80,6 @@ public class BookServiceImpl implements BookService {
     @Transactional
     public void updateBookTitleById(long id, String title) {
         bookRepository.updateBookTitleById(id, title);
-        System.out.println(id + title);
     }
 
     @Override
