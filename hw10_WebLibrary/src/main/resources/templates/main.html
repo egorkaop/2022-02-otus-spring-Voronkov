@@ -27,7 +27,7 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
 </head>
-<body>
+<body id="body">
 <!--<h3 th:text="#{lang-switcher-header}">Select language</h3>-->
 <!--<div>-->
 <!--    <div><a href="#" th:href="@{/(lang=en)}" th:text="#{en-lang-switch-button-caption}">Language - EN</a></div>-->
@@ -35,49 +35,86 @@
 <!--</div>-->
 <h1>Entity:</h1>
 
-<!--<script>-->
-<!--    function outputCharacter(character) {-->
-<!--        const dataContainer = document.getElementById("thead")-->
-<!--        dataContainer.innerHTML = `-->
-<!--        <tr>-->
-<!--            <th>ID</th>-->
-<!--            <th>Name</th>-->
-<!--        </tr>`-->
-
-<!--    }-->
-<!--</script>-->
-
 <script>
     function outputCharacter(json) {
-        const thead = document.getElementById("thead")
+        var body = document.getElementsByTagName('body')[0];
+        var table = document.createElement('table');
+        var thead = document.createElement('thead');
+        var tbody = document.createElement('tbody')
         thead.innerHTML =`
         <tr>
              <th>ID</th>
              <th>Name</th>
+             <th>Action</th>
         </tr>`
-        const tbody = document.getElementById("tbody")
-        json.forEach(book => tbody.innerHTML+=`<tr><td>${book.id}</td><td>${book.title}</td></tr>`);
+        tbody.innerHTML=``
+        json.forEach(book => tbody.innerHTML+=`
+                <tr>
+                  <td>${book.id}</td>
+                  <td>${book.title}</td>
+                  <td><button onclick = "deleteBooks(${book.id})">delete</button></td>
+                  </tr>`);
+        table.appendChild(thead);
+        table.appendChild(tbody);
+        body.appendChild(table)
     }
 </script>
 <script>
-    function getDataByJQuery() {
+    function test(){
+        var body = document.getElementsByTagName('body')[0];
+        var table = document.createElement('table');
+        var thead = document.createElement('thead');
+        thead.setAttribute("id","thead2")
+        document.getElementById("thead2").innerHTML=``
+        thead.innerHTML =`
+        <tr>
+             <th>ID</th>
+             <th>Name</th>
+             <th>Action</th>
+        </tr>`
+
+        table.appendChild(thead);
+
+
+// Adding the entire table to the body tag
+        body.appendChild(table)
+    }
+</script>
+<script>
+    function test2(){
+        document.getElementsByTagName("table")[0].deleteTHead();
+    }
+</script>
+<script>
+    function getBooks() {
         $.ajax({
             type: 'GET',
             url: '/api/books',
             success: (json) => {
-                // Вот здесь пришёл ответ
                 outputCharacter(json)
             }
         })
     }
 </script>
+<script>
+    function deleteBooks(id) {
+        $.ajax({
+            type: 'DELETE',
+            url: '/api/books/'+id,
+        }).done(function (){
+            test2();
+            getBooks();
+        })
+    }
+</script>
+<button style = "width: 400px" onclick = "getBooks() ">Получить данные о Морти Смит с помощью JQuery</button><br/><br/>
+<button style = "width: 400px" onclick = "test2()">Получить данные о Морти Смит с помощью JQuery</button><br/><br/>
+<!--<table>-->
+<!--    <thead id="thead">-->
+<!--    </thead>-->
+<!--    <tbody id="tbody"></tbody>-->
+<!--</table>-->
 
-<button style = "width: 400px" onclick = "getDataByJQuery()">Получить данные о Морти Смит с помощью JQuery</button><br/><br/>
-<table>
-    <thead id="thead">
-    </thead>
-    <tbody id="tbody"></tbody>
-</table>
 
 
 </body>
