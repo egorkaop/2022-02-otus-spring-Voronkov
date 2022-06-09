@@ -1,10 +1,7 @@
 package ru.otus.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.otus.dto.BookDto;
 import ru.otus.service.BookService;
 
@@ -26,5 +23,11 @@ public class BookControllerRest {
     public void deleteBook(@PathVariable long id){
         System.out.println(id);
         bookService.deleteBookById(id);
+    }
+
+    @PutMapping("/api/books/{id}/{title}")
+    public void updateBook(@PathVariable long id,@PathVariable String title){
+        System.out.println(id + " " + title);
+        bookService.updateBookTitleById(id,title);
     }
 }
