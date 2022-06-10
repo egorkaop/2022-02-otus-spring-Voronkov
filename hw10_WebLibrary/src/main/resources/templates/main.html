@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
     <title>List of all persons</title>
@@ -17,16 +17,23 @@
             background: lightgray;
         }
 
-        .row {
-            margin-top: 10px;
+        table {
+            border: 1px solid steelblue;
+            width: 600px;
+            border-collapse: collapse;
         }
-        .errors {
-            color: red;
+        tr, td, th {
+            padding: 5px;
+            border: 1px solid steelblue;
+        }
+        td:last-child, td:first-child {
+            width: 50px;
         }
     </style>
     <script src="/webjars/jquery/3.5.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+    <script type="text/javascript" rel="stylesheet" th:src="@{book.js}"></script>
 </head>
 <body id="body">
 <!--<h3 th:text="#{lang-switcher-header}">Select language</h3>-->
@@ -36,159 +43,6 @@
 <!--</div>-->
 <h1>Entity:</h1>
 
-<!--<script>-->
-<!--    function outputCharacter(json) {-->
-<!--        if(document.getElementById("testid")){-->
-<!--            document.getElementsByTagName("table")[0].remove();-->
-<!--        }-->
-<!--        if(document.getElementById("testName")){-->
-<!--            document.getElementsByTagName("form")[0].remove();-->
-<!--        }-->
-<!--        var body = document.getElementsByTagName('body')[0];-->
-<!--        var table = document.createElement('table');-->
-<!--        var thead = document.createElement('thead');-->
-<!--        var tbody = document.createElement('tbody');-->
-<!--        thead.setAttribute('id','testid')-->
-<!--        thead.innerHTML =`-->
-<!--                <tr>-->
-<!--                    <th>ID</th>-->
-<!--                    <th>Name</th>-->
-<!--                    <th>Action</th>-->
-<!--                    <th>Action</th>-->
-<!--                </tr>`-->
-
-<!--        table.appendChild(thead);-->
-<!--        tbody.innerHTML=``-->
-<!--        json.forEach(book => tbody.innerHTML+=`-->
-<!--                <tr>-->
-<!--                  <td>${book.id}</td>-->
-<!--                  <td>${book.title}</td>-->
-<!--                  <td><button onclick = "deleteBooks(${book.id})">delete</button></td>-->
-<!--                  <td><button onclick = "editBooksPage(${book.id})">edit</button></td>-->
-<!--                  </tr>`);-->
-<!--        table.appendChild(thead);-->
-<!--        table.appendChild(tbody);-->
-<!--        body.appendChild(table)-->
-<!--    }-->
-
-<!--    function editBooksPage(id){-->
-<!--        if(document.getElementById("testid")){-->
-<!--            document.getElementsByTagName("table")[0].remove();-->
-<!--        }-->
-<!--        if(document.getElementById("testName")){-->
-<!--            document.getElementsByTagName("form")[0].remove();-->
-<!--        }-->
-<!--        var body = document.getElementsByTagName('body')[0];-->
-<!--        var form = document.createElement('form');-->
-<!--        form.setAttribute('id','testName')-->
-<!--        form.innerHTML = `-->
-<!--        <div class="row">-->
-<!--            <label for="id-input">ID:</label>-->
-<!--            <input id="id-input" name ="id"type="text" readonly="readonly" value='${id}'>-->
-<!--        </div>-->
-<!--        <div class="row">-->
-<!--            <label name="lbl" value="Title">Title:</label>-->
-<!--            <input name="inp"/>-->
-<!--            <button type="submit">save</button>-->
-<!--        </div>-->
-<!--`-->
-<!--        body.appendChild(form);-->
-<!--        listener();-->
-
-<!--    }-->
-
-<!--//     function test(id){-->
-<!--//         console.log(id)-->
-<!--//-->
-<!--//         var body = document.getElementsByTagName('body')[0];-->
-<!--//         var form = document.createElement('form');-->
-<!--//         form.setAttribute('id','testName')-->
-<!--//         form.innerHTML = `-->
-<!--//         <div class="row">-->
-<!--//             <label for="id-input">ID:</label>-->
-<!--//             <input id="id-input" name ="id"type="text" readonly="readonly" value='${id}'>-->
-<!--//         </div>-->
-<!--//         <div class="row">-->
-<!--//             <label name="lbl" value="Title">Title:</label>-->
-<!--//             <input name="inp"/>-->
-<!--//             <button type="submit">save</button>-->
-<!--//         </div>-->
-<!--// `-->
-<!--//         body.appendChild(form);-->
-<!--//         listener();-->
-<!--//     }-->
-<!--//-->
-<!--//     function test2(){-->
-<!--//         if(document.getElementById('testName')){-->
-<!--//             var body = document.getElementsByTagName('body')[0];-->
-<!--//             body.innerHTML += `<label>label3</label>`-->
-<!--//         }-->
-<!--//-->
-<!--//     }-->
-
-
-
-<!--    function getBooks() {-->
-<!--        $.ajax({-->
-<!--            type: 'GET',-->
-<!--            url: '/api/books',-->
-<!--            success: (json) => {-->
-<!--                outputCharacter(json)-->
-<!--            }-->
-<!--        })-->
-<!--    }-->
-
-<!--    function deleteBooks(id) {-->
-
-<!--        $.ajax({-->
-<!--            type: 'DELETE',-->
-<!--            url: '/api/books/'+id,-->
-<!--        }).done(function (){-->
-<!--            getBooks();-->
-<!--        })-->
-<!--    }-->
-<!--    function updateBooks(id,title){-->
-<!--        $.ajax({-->
-<!--            type: 'PUT',-->
-<!--            url: '/api/books/'+id +'/'+ title,-->
-<!--        }).done(function (){-->
-<!--            getBooks();-->
-<!--        })-->
-<!--    }-->
-<!--    function serializeForm(formNode) {-->
-<!--        const elements = formNode.elements-->
-<!--        let arr = new Array();-->
-<!--        Array.from(elements)-->
-<!--            .forEach((element) => {-->
-<!--                arr.push(element.value)-->
-<!--            })-->
-<!--        return arr-->
-<!--    }-->
-
-<!--    async function handleFormSubmit(event) {-->
-<!--        event.preventDefault()-->
-<!--        const data = serializeForm(event.target)-->
-<!--        updateBooks(data[0],data[1])-->
-<!--    }-->
-<!--    function listener(){-->
-<!--    const applicantForm = document.getElementById('testName')-->
-<!--    applicantForm.addEventListener('submit', handleFormSubmit)-->
-<!--    }-->
-<!--</script>-->
-<!--<button style = "width: 400px" onclick = "getBooks()">Получить данные о Морти Смит с помощью JQuery</button><br/><br/>-->
-<!--<button id="MyButtonID" onclick="loadScript('/js/book.js')">Start</button>-->
-<!--<script>-->
-<!--    function loadScript(url){-->
-<!--        console.log(url)-->
-<!--        var script = document.createElement('script')-->
-<!--        script.src=url-->
-<!--        document.getElementsByTagName('head')[0].appendChild(script)-->
-<!--    }-->
-<!--</script>-->
-<script src="book.js"></script>
-<script src="/book.js"></script>
-<script src="./book.js"></script>
-
-
+<button id="MyButtonID" onclick="getBooks()">Start</button>
 </body>
 </html>

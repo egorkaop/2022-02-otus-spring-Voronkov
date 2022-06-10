@@ -14,8 +14,6 @@ public class BookControllerRest {
 
     @GetMapping("/api/books")
     public List<BookDto> getAllBooks(){
-        List<BookDto> bookDtoList = bookService.getAllBooks();
-        System.out.println(bookDtoList.get(0).getTitle());
         return bookService.getAllBooks();
     }
 
@@ -29,5 +27,10 @@ public class BookControllerRest {
     public void updateBook(@PathVariable long id,@PathVariable String title){
         System.out.println(id + " " + title);
         bookService.updateBookTitleById(id,title);
+    }
+
+    @GetMapping("/api/books/{id}")
+    public BookDto getFullBook(@PathVariable long id){
+        return bookService.getBookByID(id);
     }
 }
