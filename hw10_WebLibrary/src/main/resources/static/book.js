@@ -1,16 +1,22 @@
 function outputCharacter(json) {
     console.log(json)
-    if (document.getElementById("testid")) {
+    if (document.getElementById("theadId")) {
         document.getElementsByTagName("table")[0].remove();
     }
-    if (document.getElementById("testName")) {
+    if (document.getElementById("form")) {
         document.getElementsByTagName("form")[0].remove();
+    }
+    if (document.getElementById("button")) {
+        document.getElementById("button").remove();
     }
     var body = document.getElementsByTagName('body')[0];
     var table = document.createElement('table');
     var thead = document.createElement('thead');
     var tbody = document.createElement('tbody');
-    thead.setAttribute('id', 'testid')
+    thead.setAttribute('id', 'theadId')
+
+    body.innerHTML += `
+    <button id="button" onclick = "getAuthorsAndGenres()">insert</button>`
     thead.innerHTML = `
                 <tr>
                     <th>ID</th>
@@ -34,6 +40,71 @@ function outputCharacter(json) {
     table.appendChild(tbody);
     body.appendChild(table)
 }
+function getAuthorsAndGenres(){
+    $.ajax({
+        type: 'GET',
+        url: '/api/authors/',
+        success: (authors) => {
+            $.ajax({
+                type: 'GET',
+                url: '/api/authors/',
+                success: (genres) => {
+                    insertBookPage(authors,genres)
+                }
+            })
+        }
+    })
+}
+function insertBookPage(authors,genres){
+    if (document.getElementById("theadId")) {
+        document.getElementsByTagName("table")[0].remove();
+    }
+    if (document.getElementById("form")) {
+        document.getElementsByTagName("form")[0].remove();
+    }
+    console.log(authors)
+    console.log(genres)
+    var body = document.getElementsByTagName('body')[0];
+    var form = document.createElement('form');
+    form.setAttribute('id', 'form')
+    form.innerHTML = `
+        <div class="row">
+            <label name="lbl" value="Title">Title:</label>
+            <input name="title"/>
+            <button type="submit">save</button>
+        </div>`
+    var selectAuthors = document.createElement('select')
+    selectAuthors.setAttribute('multiple','multiple')
+    selectAuthors.setAttribute('name','authors')
+    var selectGenres = document.createElement('select')
+    selectGenres.setAttribute('multiple','multiple')
+    selectGenres.setAttribute('name','genres')
+    authors.forEach(author => selectAuthors.innerHTML += `
+    <option>${author.id}</option>`)
+    genres.forEach(genre => selectGenres.innerHTML += `
+    <option>${genre.id}</option>`)
+    form.appendChild(selectGenres)
+    form.appendChild(selectAuthors)
+    body.appendChild(form);
+    listenerInsert();
+}
+async function handleFormEditInsert(event) {
+    event.preventDefault()
+    console.log($(this).serialize())
+    $.ajax({
+        url: '/api/books',
+        method: 'post',
+        dataType: 'html',
+        data: $(this).serialize(),
+    }).done(function () {
+        getBooks();
+    });
+}
+
+function listenerInsert() {
+    const applicantForm = document.getElementById('form')
+    applicantForm.addEventListener('submit', handleFormEditInsert)
+}
 function getFullBook(id){
     $.ajax({
         type: 'GET',
@@ -46,17 +117,17 @@ function getFullBook(id){
 
 function fullBookPage(json){
     console.log(json)
-    if (document.getElementById("testid")) {
+    if (document.getElementById("theadId")) {
         document.getElementsByTagName("table")[0].remove();
     }
-    if (document.getElementById("testName")) {
+    if (document.getElementById("form")) {
         document.getElementsByTagName("form")[0].remove();
     }
     var body = document.getElementsByTagName('body')[0];
     var table = document.createElement('table');
     var thead = document.createElement('thead');
     var tbody = document.createElement('tbody');
-    thead.setAttribute('id', 'testid')
+    thead.setAttribute('id', 'theadId')
     var trHead = document.createElement('tr');
     var trBody = document.createElement('tr');
     trHead.innerHTML = `
@@ -85,19 +156,20 @@ function fullBookPage(json){
 }
 
 function editBooksPage(id) {
-    if (document.getElementById("testid")) {
+
+    if (document.getElementById("theadId")) {
         document.getElementsByTagName("table")[0].remove();
     }
-    if (document.getElementById("testName")) {
+    if (document.getElementById("form")) {
         document.getElementsByTagName("form")[0].remove();
     }
     var body = document.getElementsByTagName('body')[0];
     var form = document.createElement('form');
-    form.setAttribute('id', 'testName')
+    form.setAttribute('id', 'form')
     form.innerHTML = `
         <div class="row">
             <label for="id-input">ID:</label>
-            <input id="id-input" name ="id"type="text" readonly="readonly" value='${id}'>
+            <input id="id-input" name ="id" type="text" readonly="readonly" value='${id}'>
         </div>
         <div class="row">
             <label name="lbl" value="Title">Title:</label>
@@ -106,7 +178,7 @@ function editBooksPage(id) {
         </div>
 `
     body.appendChild(form);
-    listener();
+    listenerEdit();
 
 }
 
@@ -139,9 +211,9 @@ function updateBooks(id, title) {
     })
 }
 
-function serializeForm(formNode) {
+function serializeFormEdit(formNode) {
     const elements = formNode.elements
-    let arr = new Array();
+    let arr = [];
     Array.from(elements)
         .forEach((element) => {
             arr.push(element.value)
@@ -149,13 +221,13 @@ function serializeForm(formNode) {
     return arr
 }
 
-async function handleFormSubmit(event) {
+async function handleFormEditSubmit(event) {
     event.preventDefault()
-    const data = serializeForm(event.target)
+    const data = serializeFormEdit(event.target)
     updateBooks(data[0], data[1])
 }
 
-function listener() {
-    const applicantForm = document.getElementById('testName')
-    applicantForm.addEventListener('submit', handleFormSubmit)
+function listenerEdit() {
+    const applicantForm = document.getElementById('form')
+    applicantForm.addEventListener('submit', handleFormEditSubmit)
 }

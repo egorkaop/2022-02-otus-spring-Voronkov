@@ -33,4 +33,9 @@ public class BookControllerRest {
     public BookDto getFullBook(@PathVariable long id){
         return bookService.getBookByID(id);
     }
+
+    @PostMapping("/api/books")
+    public void insertBook(String title, long[] genres, long[] authors){
+        bookService.insertBook(title,authors,genres);
+    }
 }
