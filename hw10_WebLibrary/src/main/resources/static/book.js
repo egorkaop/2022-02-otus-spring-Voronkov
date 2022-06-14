@@ -1,4 +1,4 @@
-function outputCharacter(json) {
+function allBookPage(json) {
     console.log(json)
     if (document.getElementById("theadId")) {
         document.getElementsByTagName("table")[0].remove();
@@ -16,11 +16,13 @@ function outputCharacter(json) {
     thead.setAttribute('id', 'theadId')
 
     body.innerHTML += `
-    <button id="button" onclick = "getAuthorsAndGenres()">insert</button>`
+    <div>
+    <button id="button" onclick = "getAuthorsAndGenres()">insert</button>
+    </div>`
     thead.innerHTML = `
                 <tr>
                     <th>ID</th>
-                    <th>Name</th>
+                    <th>Title</th>
                     <th>Action</th>
                     <th>Action</th>
                     <th>Action</th>
@@ -47,7 +49,7 @@ function getAuthorsAndGenres(){
         success: (authors) => {
             $.ajax({
                 type: 'GET',
-                url: '/api/authors/',
+                url: '/api/genres/',
                 success: (genres) => {
                     insertBookPage(authors,genres)
                 }
@@ -61,6 +63,9 @@ function insertBookPage(authors,genres){
     }
     if (document.getElementById("form")) {
         document.getElementsByTagName("form")[0].remove();
+    }
+    if (document.getElementById("button")) {
+        document.getElementById("button").remove();
     }
     console.log(authors)
     console.log(genres)
@@ -80,11 +85,15 @@ function insertBookPage(authors,genres){
     selectGenres.setAttribute('multiple','multiple')
     selectGenres.setAttribute('name','genres')
     authors.forEach(author => selectAuthors.innerHTML += `
-    <option>${author.id}</option>`)
+    <option value="${author.id}">${author.name} ${author.surname}</option>`)
     genres.forEach(genre => selectGenres.innerHTML += `
-    <option>${genre.id}</option>`)
-    form.appendChild(selectGenres)
-    form.appendChild(selectAuthors)
+    <option value="${genre.id}">${genre.name}</option>`)
+    var divAuthors = document.createElement('div')
+    var divGenres = document.createElement('div')
+    divAuthors.appendChild(selectAuthors)
+    divGenres.appendChild(selectGenres)
+    form.appendChild(divAuthors)
+    form.appendChild(divGenres)
     body.appendChild(form);
     listenerInsert();
 }
@@ -187,7 +196,7 @@ function getBooks() {
         type: 'GET',
         url: '/api/books',
         success: (json) => {
-            outputCharacter(json)
+            allBookPage(json)
         }
     })
 }
