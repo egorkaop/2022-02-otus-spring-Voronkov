@@ -21,11 +21,4 @@ public class BookDto {
         this.id = id;
         this.title = title;
     }
-
-    @Override
-    public String toString() {
-        return "title='" + title + '\'' +
-                ", authors=" + authors.toString() +
-                ", genres=" + genres.toString();
-    }
 }

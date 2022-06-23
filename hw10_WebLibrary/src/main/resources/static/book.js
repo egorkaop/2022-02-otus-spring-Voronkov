@@ -99,15 +99,20 @@ function insertBookPage(authors,genres){
 }
 async function handleFormEditInsert(event) {
     event.preventDefault()
-    console.log($(this).serialize())
+    const data = new FormData(event.target);
+    const book = Object.fromEntries(data.entries());
+    book.authors = data.getAll("authors");
+    book.genres = data.getAll("genres");
+    console.log(book)
     $.ajax({
         url: '/api/books',
         method: 'post',
-        dataType: 'html',
-        data: $(this).serialize(),
-    }).done(function () {
-        getBooks();
-    });
+        dataType: 'json',
+        data: book,
+        complete: function (){
+            getBooks();
+        }
+    })
 }
 
 function listenerInsert() {
@@ -212,13 +217,17 @@ function deleteBooks(id) {
 }
 
 function updateBooks(id, title) {
+    console.log(id)
+    console.log(title)
     $.ajax({
-        type: 'PUT',
-        url: '/api/books/' + id + '/' + title,
-    }).done(function () {
-        getBooks();
-    })
-}
+        type: 'PATCH',
+        url: '/api/books/' + id,
+        dataType: 'json',
+        data: title,
+        complete: function (){
+            getBooks();
+        }
+})}
 
 function serializeFormEdit(formNode) {
     const elements = formNode.elements
@@ -232,8 +241,12 @@ function serializeFormEdit(formNode) {
 
 async function handleFormEditSubmit(event) {
     event.preventDefault()
-    const data = serializeFormEdit(event.target)
-    updateBooks(data[0], data[1])
+    event.preventDefault()
+    const data = new FormData(event.target);
+    const book = Object.fromEntries(data.entries());
+    var object = {};
+    object['title'] = book.inp;
+    updateBooks(book.id, object)
 }
 
 function listenerEdit() {

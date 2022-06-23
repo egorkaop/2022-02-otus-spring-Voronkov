@@ -3,6 +3,8 @@ package ru.otus.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.otus.dto.BookDto;
+import ru.otus.dto.BookInsertDto;
+import ru.otus.dto.BookUpdateDto;
 import ru.otus.service.BookService;
 
 import java.util.List;
@@ -23,19 +25,18 @@ public class BookControllerRest {
         bookService.deleteBookById(id);
     }
 
-    @PutMapping("/api/books/{id}/{title}")
-    public void updateBook(@PathVariable long id, @PathVariable String title) {
-        System.out.println(id + " " + title);
-        bookService.updateBookTitleById(id, title);
+    @PatchMapping("/api/books/{id}")
+    public void updateBook(@PathVariable long id, BookUpdateDto bookUpdateDto) {
+        bookService.updateBookTitleById(id, bookUpdateDto);
     }
 
     @GetMapping("/api/books/{id}")
-    public BookDto getFullBook(@PathVariable long id) {
+    public BookDto getFullBook(@PathVariable(name = "id") long id) {
         return bookService.getBookByID(id);
     }
 
     @PostMapping("/api/books")
-    public void insertBook(String title, long[] genres, long[] authors) {
-        bookService.insertBook(title, authors, genres);
+    public void insertBook(BookInsertDto bookInsertDto) {
+        bookService.insertBook(bookInsertDto);
     }
 }

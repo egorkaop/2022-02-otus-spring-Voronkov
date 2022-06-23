@@ -10,6 +10,8 @@ import ru.otus.domain.Author;
 import ru.otus.domain.Book;
 import ru.otus.domain.Genre;
 import ru.otus.dto.BookDto;
+import ru.otus.dto.BookInsertDto;
+import ru.otus.dto.BookUpdateDto;
 import ru.otus.exceptions.BookNotFoundException;
 import ru.otus.service.BookService;
 import ru.otus.service.IOService;
@@ -57,10 +59,10 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional
-    public void insertBook(String title, long[] authorsId,long[] genresId) {
-        List<Author> authors = getListOfAuthors(authorsId);
-        List<Genre> genres = getListOfGenres(genresId);
-        bookRepository.save(new Book(title, authors, genres));
+    public void insertBook(BookInsertDto bookInsertDto) {
+        List<Author> authors = getListOfAuthors(bookInsertDto.getAuthors());
+        List<Genre> genres = getListOfGenres(bookInsertDto.getGenres());
+        bookRepository.save(new Book(bookInsertDto.getTitle(), authors, genres));
     }
 
     @Override
@@ -75,8 +77,8 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional
-    public void updateBookTitleById(long id, String title) {
-        bookRepository.updateBookTitleById(id, title);
+    public void updateBookTitleById(long id, BookUpdateDto bookUpdateDto) {
+        bookRepository.updateBookTitleById(id, bookUpdateDto.getTitle());
     }
 
     @Override
@@ -94,16 +96,16 @@ public class BookServiceImpl implements BookService {
     }
 
 
-    private List<Author> getListOfAuthors(long[] authorsId) {
-        List<Author> authorList = Arrays.stream(authorsId)
-                .mapToObj(authorRepository::getById)
+    private List<Author> getListOfAuthors(List<Long> authorsId) {
+        List<Author> authorList = authorsId.stream()
+                .map(authorRepository::getById)
                 .collect(Collectors.toList());
         return authorList;
     }
 
-    private List<Genre> getListOfGenres(long[] genresId) {
-        List<Genre> genreList = Arrays.stream(genresId)
-                .mapToObj(genreRepository::getById)
+    private List<Genre> getListOfGenres(List<Long> genresId) {
+        List<Genre> genreList = genresId.stream()
+                .map(genreRepository::getById)
                 .collect(Collectors.toList());
         return genreList;
     }
