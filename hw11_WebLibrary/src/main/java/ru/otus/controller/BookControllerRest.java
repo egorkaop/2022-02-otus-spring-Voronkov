@@ -1,15 +1,14 @@
 package ru.otus.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ru.otus.dao.AuthorRepository;
 import ru.otus.dao.BookRepository;
 import ru.otus.dao.GenreRepository;
-import ru.otus.domain.Author;
 import ru.otus.domain.Book;
+import ru.otus.domain.Genre;
 import ru.otus.dto.BookDto;
 import ru.otus.dto.BookInsertDto;
 import ru.otus.dto.BookUpdateDto;
@@ -17,7 +16,6 @@ import ru.otus.utils.BookDtoMapper;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -47,14 +45,27 @@ public class BookControllerRest {
 
     @GetMapping("/api/books/{id}")
     public Mono<BookDto> getFullBook(@PathVariable(name = "id") String id) {
-        return bookRepository.findById(id).map(b->bookDtoMapper.convertBookToDto(b));
+        return bookRepository.findById(id).map(b -> bookDtoMapper.convertBookToDto(b));
     }
 
+    @PostMapping("/api/books")
+    public Mono<BookDto> insertBook(BookInsertDto bookInsertDto) {
+        System.out.println(bookInsertDto.getAuthors());
+        return authorRepository.findAllById(bookInsertDto.getAuthors())
+                .collectList()
+                .flatMap(authors ->
+                        genreRepository.findAllById(bookInsertDto.getGenres()).collectList()
+                                .flatMap(genres ->
+                                        bookRepository.save(new Book(bookInsertDto.getTitle(),authors,genres))
+                                                .map(bookDtoMapper::convertBookToDto)));
+    }
 //    @PostMapping("/api/books")
-//    public Mono<Object> insertBook(BookInsertDto bookInsertDto) {
-//        List<Author> authors = new ArrayList<>();
-//        authorRepository.findAllById(bookInsertDto.getAuthors()).map(authors::add).subscribe();
-//        System.out.println(authors.size());
-//        return null;
+//    public Mono<BookDto> insertBook(BookInsertDto bookInsertDto) {
+//        return Mono.zip(authorRepository.findAllById(bookInsertDto.getAuthors())
+//                                .collectList(),
+//                        genreRepository.findAllById(bookInsertDto.getGenres())
+//                                .collectList()).flatMap(r -> bookRepository
+//                        .save(new Book(bookInsertDto.getTitle(), r.getT1(), r.getT2())))
+//                .map(bookDtoMapper::convertBookToDto);
 //    }
 }
