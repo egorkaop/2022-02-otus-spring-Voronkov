@@ -94,16 +94,14 @@ public class BookServiceImpl implements BookService {
 
 
     private List<Author> getListOfAuthors(List<Long> authorsId) {
-        List<Author> authorList = authorsId.stream()
+        return authorsId.stream()
                 .map(authorRepository::getById)
                 .collect(Collectors.toList());
-        return authorList;
     }
 
     private List<Genre> getListOfGenres(List<Long> genresId) {
-        List<Genre> genreList = genresId.stream()
+        return genresId.stream()
                 .map(genreRepository::getById)
                 .collect(Collectors.toList());
-        return genreList;
     }
 }

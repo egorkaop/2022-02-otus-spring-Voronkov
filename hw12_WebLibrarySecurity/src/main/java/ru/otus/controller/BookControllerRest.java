@@ -35,7 +35,7 @@ public class BookControllerRest {
     }
 
     @PostMapping("/api/books")
-    public void insertBook(BookInsertDto bookInsertDto) {
+    public void insertBook(@RequestBody BookInsertDto bookInsertDto) {
         bookService.insertBook(bookInsertDto);
     }
 }

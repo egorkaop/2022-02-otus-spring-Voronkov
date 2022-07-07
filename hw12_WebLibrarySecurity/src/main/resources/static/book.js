@@ -108,7 +108,8 @@ async function handleFormEditInsert(event) {
         url: '/api/books',
         method: 'post',
         dataType: 'json',
-        data: book,
+        contentType: "application/json",
+        data: JSON.stringify(book),
         complete: function (){
             getBooks();
         }
