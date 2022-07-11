@@ -1,6 +1,7 @@
 package ru.otus.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 import ru.otus.dto.BookDto;
 import ru.otus.dto.BookInsertDto;
