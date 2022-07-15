@@ -1,0 +1,68 @@
+package ru.otus.controller;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.web.servlet.MockMvc;
+import ru.otus.service.AuthorService;
+import ru.otus.service.UserService;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+@WebMvcTest(AuthorControllerRest.class)
+class AuthorControllerRestTest {
+    @Autowired
+    private MockMvc mockMvc;
+    @MockBean
+    private UserService userService;
+    @MockBean
+    private AuthorService authorService;
+
+    //get/api/authors
+    @DisplayName("Должен делать redirect с get/api/authors на /login если пользователь не авторизован")
+    @Test
+    public void testAuthenticatedOnAnonymousByGetApiRequest() throws Exception {
+        mockMvc.perform(get("/api/authors"))
+                .andExpect(status().is3xxRedirection());
+        mockMvc.perform(get("/api/authors"))
+                .andExpect(redirectedUrl("http://localhost/login"));
+    }
+
+    @WithMockUser(
+            username = "admin",
+            authorities = {"ROLE_ADMIN"}
+    )
+    @Test
+    @DisplayName("Должен пускать на get'/api/authors' если пользователь авторизован")
+    public void testAuthenticatedOnAdminByGetApiRequest() throws Exception {
+        mockMvc.perform(get("/api/authors"))
+                .andExpect(status().isOk());
+    }
+
+    //delete/api/authors/1
+    @DisplayName("Должен делать redirect с delete/api/authors/1 на /login если пользователь не авторизован")
+    @Test
+    public void testAuthenticatedOnAnonymousByDeleteApiRequest() throws Exception {
+        mockMvc.perform(delete("/api/authors/1"))
+                .andExpect(status().is3xxRedirection());
+        mockMvc.perform(delete("/api/authors/1"))
+                .andExpect(redirectedUrl("http://localhost/login"));
+    }
+
+    @WithMockUser(
+            username = "admin",
+            authorities = {"ROLE_ADMIN"}
+    )
+    @Test
+    @DisplayName("Должен пускать на delete'/api/authors/1' если пользователь авторизован")
+    public void testAuthenticatedOnAdminByDeleteApiRequest() throws Exception {
+        mockMvc.perform(delete("/api/authors/1"))
+                .andExpect(status().isOk());
+    }
+}
