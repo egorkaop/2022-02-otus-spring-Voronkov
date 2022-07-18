@@ -72,6 +72,16 @@ class BookControllerRestTest {
                 .andExpect(status().isOk());
     }
 
+    @WithMockUser(
+            username = "user",
+            authorities = {"ROLE_USER"}
+    )
+    @DisplayName("Должен делать пускать на delete/api/books/2 на /login если пользователь не авторизован")
+    @Test
+    public void testAuthenticatedOnUserByDeleteRequest() throws Exception {
+        bookService.deleteBookById(2L);
+    }
+
     //patch/api/books/1
     @DisplayName("Должен делать redirect с patch/api/books/1 на /login если пользователь не авторизован")
     @Test
