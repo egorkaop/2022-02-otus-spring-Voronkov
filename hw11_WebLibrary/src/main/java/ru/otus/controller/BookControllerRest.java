@@ -48,17 +48,31 @@ public class BookControllerRest {
         return bookRepository.findById(id).map(b -> bookDtoMapper.convertBookToDto(b));
     }
 
-    @PostMapping("/api/books")
-    public Mono<BookDto> insertBook(BookInsertDto bookInsertDto) {
-        System.out.println(bookInsertDto.getAuthors());
-        return authorRepository.findAllById(bookInsertDto.getAuthors())
-                .collectList()
-                .flatMap(authors ->
-                        genreRepository.findAllById(bookInsertDto.getGenres()).collectList()
-                                .flatMap(genres ->
-                                        bookRepository.save(new Book(bookInsertDto.getTitle(),authors,genres))
-                                                .map(bookDtoMapper::convertBookToDto)));
-    }
+
+//    @PostMapping("/api/books")
+//    public Mono<BookDto> insertBook(BookInsertDto bookInsertDto) {
+//        System.out.println(bookInsertDto.getAuthors());
+//        var list = List.of("egor0");
+//        return authorRepository.findAllByNameIn(list)
+//                .collectList()
+//                .flatMap(authors ->
+//                        genreRepository.findAllById(bookInsertDto.getGenres()).collectList()
+//                                .flatMap(genres ->
+//                                        bookRepository.save(new Book(bookInsertDto.getTitle(),authors,genres))
+//                                                .map(bookDtoMapper::convertBookToDto)));
+//    }
+
+//    @PostMapping("/api/books")
+//    public Mono<BookDto> insertBook(BookInsertDto bookInsertDto) {
+//        System.out.println(bookInsertDto.getAuthors());
+//        return authorRepository.findAllById(bookInsertDto.getAuthors())
+//                .collectList()
+//                .flatMap(authors ->
+//                        genreRepository.findAllById(bookInsertDto.getGenres()).collectList()
+//                                .flatMap(genres ->
+//                                        bookRepository.save(new Book(bookInsertDto.getTitle(),authors,genres))
+//                                                .map(bookDtoMapper::convertBookToDto)));
+//    }
 //    @PostMapping("/api/books")
 //    public Mono<BookDto> insertBook(BookInsertDto bookInsertDto) {
 //        return Mono.zip(authorRepository.findAllById(bookInsertDto.getAuthors())

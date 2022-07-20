@@ -16,4 +16,6 @@ public interface AuthorRepository extends ReactiveMongoRepository<Author, String
     @Override
     Flux<Author> findAllById(Iterable<String> strings);
 
+    Flux<Author> findAllByNameIn(List<String> authorsName);
+
 }

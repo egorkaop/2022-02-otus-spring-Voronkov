@@ -15,10 +15,10 @@ function allBookPage(json) {
     var tbody = document.createElement('tbody');
     thead.setAttribute('id', 'theadId')
 
-    body.innerHTML += `
-    <div>
-    <button id="button" onclick = "getAuthorsAndGenres()">insert</button>
-    </div>`
+    // body.innerHTML += `
+    // <div>
+    // <button id="button" onclick = "getAuthorsAndGenres()">insert</button>
+    // </div>`
     thead.innerHTML = `
                 <tr>
                     <th>ID</th>
